@@ -3,7 +3,7 @@ defmodule FinancialSystem.Money do
     Data structure to handle money operations. 
   """
 
-  defstruct integer_part: nil, fractional_part: nil, currency: nil
+  defstruct minor_units: nil, currency: nil
 
   alias FinancialSystem.Currency
   alias FinancialSystem.Money
@@ -12,32 +12,27 @@ defmodule FinancialSystem.Money do
     if not valid_amount?(amount) do
       raise "Invalid amount format"
     end
+    {int_part, tail} = Integer.parse(amount)
+    fract_part = tail
+    |> String.trim(".")
+    |> String.pad_trailing(currency.decimal_places, "0")
+    |> String.to_integer
+    minor_units = int_part * trunc(:math.pow(10, currency.decimal_places)) + fract_part
     {:ok, 
       %Money{
-        integer_part: get_integer_part(amount),
-        fractional_part: get_fractional_part(amount, currency.decimal_places),
+        minor_units: minor_units,
         currency: currency
       }
     }
   end
 
-  def get_integer_part(amount) do
-    {integer_part, _tail} = Integer.parse(amount)
-    integer_part
-  end
-
-  def get_fractional_part(amount, decimal_places) do
-    {_integer_part, str_fractional} = Integer.parse(amount)
-    str_fractional = String.trim(str_fractional, ".")
-    exponent = decimal_places - String.length(str_fractional)
-    exponent = max(0, exponent)
-    trunc(String.to_integer(str_fractional) * :math.pow(10, exponent))
-  end
-
   def valid_amount?(amount) when is_binary(amount) do
-    not String.match?(amount, ~r/([A-z]+|\s+)/) and
-    (length(String.split(amount, ".")) == 2 or
-     length(String.split(amount, ".")) == 1)
+    try do
+      _ = String.to_float(amount)
+      true
+    rescue
+      ArgumentError -> false
+    end
   end
 
   def valid_amount?(amount) when is_number(amount), do: false
@@ -50,11 +45,8 @@ defmodule FinancialSystem.Money do
   def add(%Money{} = money1, %Money{} = money2) do
     if money1.currency != money2.currency, do: raise "Can't add different currencies"
 
-    total = get_value_in_minor_units(money1) + get_value_in_minor_units(money2)
-
     %Money{
-      integer_part: div(total, get_power(money1)),
-      fractional_part: rem(total, get_power(money1)),
+      minor_units: money1.minor_units + money2.minor_units,
       currency: money1.currency
     }
   end
@@ -71,18 +63,12 @@ defmodule FinancialSystem.Money do
   def subtract(%Money{} = money1, %Money{} = money2) do
     if money1.currency != money2.currency, do: raise "Can't subtract different currencies"
 
-    total = get_value_in_minor_units(money1) - get_value_in_minor_units(money2)
-
     %Money{
-      integer_part: div(total, get_power(money1)),
-      fractional_part: rem(total, get_power(money1)),
+      minor_units: money1.minor_units - money2.minor_units,
       currency: money1.currency
     }
   end
 
-  defp get_value_in_minor_units(%Money{} = money) do
-    money.integer_part * get_power(money) + money.fractional_part
-  end
 
   defp get_power(%Money{} = money) do
     trunc(:math.pow(10, money.currency.decimal_places))
