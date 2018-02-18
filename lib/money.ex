@@ -8,7 +8,7 @@ defmodule FinancialSystem.Money do
   alias FinancialSystem.Currency
   alias FinancialSystem.Money
 
-  def new(amount, precision \\ 14, %Currency{} = currency) do
+  def new(amount, precision \\ 2, %Currency{} = currency) do
     if not valid_amount?(amount) do
       raise "Invalid amount format"
     end
@@ -38,7 +38,7 @@ defmodule FinancialSystem.Money do
     |> String.trim(".")
     |> String.pad_trailing(decimal_places, "0")
     |> String.to_integer
-    int_part * get_power_of_ten(decimal_places) + fract_part
+    int_part * power_of_ten(decimal_places) + fract_part
   end
 
   def add(%Money{} = money1, value) when is_binary(value) do
@@ -49,15 +49,14 @@ defmodule FinancialSystem.Money do
   def add(%Money{} = money1, %Money{} = money2) do
     if money1.currency != money2.currency, do: raise "Can't add different currencies"
 
-    total = 
-      cond do
-        money1.precision == money2.precision ->
-          money1.minor_units + money2.minor_units
-        money1.precision > money2.precision ->
-          money1.minor_units + money2.minor_units * get_power_of_ten(money1.precision - money2.precision)
-        money1.precision < money2.precision ->
-          money1.minor_units * get_power_of_ten(money2.precision - money1.precision) + money2.minor_units
-      end
+    total = cond do
+      money1.precision == money2.precision ->
+        money1.minor_units + money2.minor_units
+      money1.precision > money2.precision ->
+        money1.minor_units + money2.minor_units * power_of_ten(money1.precision - money2.precision)
+      money1.precision < money2.precision ->
+        money1.minor_units * power_of_ten(money2.precision - money1.precision) + money2.minor_units
+    end
 
     %Money{
       minor_units: total,
@@ -71,22 +70,20 @@ defmodule FinancialSystem.Money do
     subtract(money1, money2)
   end
 
-
   @doc """
     Subtract value of second money from the first money.
   """
   def subtract(%Money{} = money1, %Money{} = money2) do
     if money1.currency != money2.currency, do: raise "Can't subtract different currencies"
 
-    total = 
-      cond do
-        money1.precision == money2.precision ->
-          money1.minor_units - money2.minor_units
-        money1.precision > money2.precision ->
-          money1.minor_units - money2.minor_units * get_power_of_ten(money1.precision - money2.precision)
-        money1.precision < money2.precision ->
-          money1.minor_units * get_power_of_ten(money2.precision - money1.precision) - money2.minor_units
-      end
+    total = cond do
+      money1.precision == money2.precision ->
+        money1.minor_units - money2.minor_units
+      money1.precision > money2.precision ->
+        money1.minor_units - money2.minor_units * power_of_ten(money1.precision - money2.precision)
+      money1.precision < money2.precision ->
+        money1.minor_units * power_of_ten(money2.precision - money1.precision) - money2.minor_units
+    end
 
     %Money{
       minor_units: total,
@@ -100,8 +97,8 @@ defmodule FinancialSystem.Money do
   """
   def multiply(%Money{} = money, value) when is_binary(value) do
     if not valid_amount?(value), do: raise "Invalid value format"
-    value_precision = 
-      value 
+    value_precision =
+      value
       |> String.split(".")
       |> List.last
       |> String.length
@@ -113,17 +110,20 @@ defmodule FinancialSystem.Money do
   end
 
   def as_string(%Money{} = money) do
-    Integer.to_string(div(money.minor_units, get_power_of_ten(money.precision)))
-      <> "." <>
-      Integer.to_string(rem(money.minor_units, get_power_of_ten(money.precision)))
+    int_part = Integer.to_string(
+      div(money.minor_units, power_of_ten(money.precision)))
+    String.replace_prefix(
+      Integer.to_string(money.minor_units),
+      int_part,
+      int_part <> ".")
   end
 
-  defp get_power_of_ten(n) when n == 0 do
+  defp power_of_ten(n) when n == 0 do
     1
   end
 
-  defp get_power_of_ten(n) do
-    10 * get_power_of_ten(n-1)
+  defp power_of_ten(n) do
+    10 * power_of_ten(n-1)
   end
 
 end

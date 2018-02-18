@@ -3,15 +3,25 @@ defmodule FinancialSystem.Currency do
     Data structure to handle currency operations. 
   """
 
+  alias FinancialSystem.Currency
+
   defstruct alphabetic_code: nil, numeric_code: nil, decimal_places: nil
 
   def new(alphabetic_code, numeric_code, decimal_places) do
     case valid?(alphabetic_code, numeric_code, decimal_places) do
-      :ok -> {:ok, %FinancialSystem.Currency{
+      :ok -> {:ok, %Currency{
         alphabetic_code: alphabetic_code,
         numeric_code: numeric_code,
         decimal_places: decimal_places}}
     end
+  end
+
+  def valid?(%Currency{} = currency) do
+    valid?(
+      currency.alphabetic_code,
+      currency.numeric_code,
+      currency.decimal_places
+      )
   end
 
   def valid?(alphabetic_code, numeric_code, decimal_places) do
