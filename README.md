@@ -1,4 +1,4 @@
-# Tech Challenge [![Build Status](https://travis-ci.org/victorprs/financial-system.svg?branch=master)](https://travis-ci.org/victorprs/financial-system) [![Coverage Status](https://coveralls.io/repos/github/victorprs/financial-system/badge.svg?branch=coveralls-setup)](https://coveralls.io/github/victorprs/financial-system?branch=coveralls-setup)
+# Tech Challenge [![Build Status](https://travis-ci.org/victorprs/financial-system.svg?branch=master)](https://travis-ci.org/victorprs/financial-system) [![Coverage Status](https://coveralls.io/repos/github/victorprs/financial-system/badge.svg?branch=master)](https://coveralls.io/github/victorprs/financial-system?branch=master)
 
 Bem vindo(a)! Esse é o Tech Challenge Elixir!
 
