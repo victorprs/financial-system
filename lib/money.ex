@@ -73,11 +73,11 @@ defmodule FinancialSystem.Money do
   end
 
 
-  def get_power(%Money{} = money, n) when n == 0 do
+  defp get_power(%Money{} = money, n) when n == 0 do
     1
   end
 
-  def get_power(%Money{} = money, n) do
+  defp get_power(%Money{} = money, n) do
     10 * get_power(money, n-1)
   end
 
