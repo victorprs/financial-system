@@ -73,7 +73,12 @@ defmodule FinancialSystem.Money do
   end
 
 
-  defp get_power(%Money{} = money) do
-    trunc(:math.pow(10, money.currency.decimal_places))
+  def get_power(%Money{} = money, n) when n == 0 do
+    1
   end
+
+  def get_power(%Money{} = money, n) do
+    10 * get_power(money, n-1)
+  end
+
 end
