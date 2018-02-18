@@ -37,7 +37,7 @@ defmodule FinancialSystem.Money do
     |> String.trim(".")
     |> String.pad_trailing(decimal_places, "0")
     |> String.to_integer
-    int_part * trunc(:math.pow(10, decimal_places)) + fract_part
+    int_part * get_power_of_ten(decimal_places) + fract_part
   end
 
   def add(%Money{} = money1, value) when is_binary(value) do
@@ -72,13 +72,22 @@ defmodule FinancialSystem.Money do
     }
   end
 
+@doc """
+    Multiply value of money by another value
+  """
+  def multiply(%Money{} = money, value) when is_float(value) do
+    %Money{
+      minor_units: trunc(money.minor_units * value),
+      currency: money.currency
+    }
+  end
 
-  defp get_power(%Money{} = money, n) when n == 0 do
+  defp get_power_of_ten(n) when n == 0 do
     1
   end
 
-  defp get_power(%Money{} = money, n) do
-    10 * get_power(money, n-1)
+  defp get_power_of_ten(n) do
+    10 * get_power_of_ten(n-1)
   end
 
 end
