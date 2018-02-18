@@ -3,18 +3,19 @@ defmodule FinancialSystem.Money do
     Data structure to handle money operations. 
   """
 
-  defstruct minor_units: nil, currency: nil
+  defstruct minor_units: nil, precision: nil, currency: nil
 
   alias FinancialSystem.Currency
   alias FinancialSystem.Money
 
-  def new(amount, %Currency{} = currency) do
+  def new(amount, precision \\ 14, %Currency{} = currency) do
     if not valid_amount?(amount) do
       raise "Invalid amount format"
     end
     {:ok,
       %Money{
-        minor_units: string_to_minor_units(amount, currency.decimal_places),
+        minor_units: string_to_minor_units(amount, precision),
+        precision: precision,
         currency: currency
       }
     }
@@ -41,21 +42,32 @@ defmodule FinancialSystem.Money do
   end
 
   def add(%Money{} = money1, value) when is_binary(value) do
-    {:ok, money2} = Money.new(value, money1.currency)
+    {:ok, money2} = Money.new(value, money1.precision, money1.currency)
     add(money1, money2)
   end
 
   def add(%Money{} = money1, %Money{} = money2) do
     if money1.currency != money2.currency, do: raise "Can't add different currencies"
 
+    total = 
+      cond do
+        money1.precision == money2.precision ->
+          money1.minor_units + money2.minor_units
+        money1.precision > money2.precision ->
+          money1.minor_units + money2.minor_units * get_power_of_ten(money1.precision - money2.precision)
+        money1.precision < money2.precision ->
+          money1.minor_units * get_power_of_ten(money2.precision - money1.precision) + money2.minor_units
+      end
+
     %Money{
-      minor_units: money1.minor_units + money2.minor_units,
+      minor_units: total,
+      precision: max(money1.precision, money2.precision),
       currency: money1.currency
     }
   end
 
   def subtract(%Money{} = money1, value) when is_binary(value) do
-    {:ok, money2} = Money.new(value, money1.currency)
+    {:ok, money2} = Money.new(value, money1.precision, money1.currency)
     subtract(money1, money2)
   end
 
@@ -66,8 +78,19 @@ defmodule FinancialSystem.Money do
   def subtract(%Money{} = money1, %Money{} = money2) do
     if money1.currency != money2.currency, do: raise "Can't subtract different currencies"
 
+    total = 
+      cond do
+        money1.precision == money2.precision ->
+          money1.minor_units - money2.minor_units
+        money1.precision > money2.precision ->
+          money1.minor_units - money2.minor_units * get_power_of_ten(money1.precision - money2.precision)
+        money1.precision < money2.precision ->
+          money1.minor_units * get_power_of_ten(money2.precision - money1.precision) - money2.minor_units
+      end
+
     %Money{
-      minor_units: money1.minor_units - money2.minor_units,
+      minor_units: total,
+      precision: max(money1.precision, money2.precision),
       currency: money1.currency
     }
   end
@@ -75,11 +98,24 @@ defmodule FinancialSystem.Money do
 @doc """
     Multiply value of money by another value
   """
-  def multiply(%Money{} = money, value) when is_float(value) do
+  def multiply(%Money{} = money, value) when is_binary(value) do
+    if not valid_amount?(value), do: raise "Invalid value format"
+    value_precision = 
+      value 
+      |> String.split(".")
+      |> List.last
+      |> String.length
     %Money{
-      minor_units: trunc(money.minor_units * value),
+      minor_units: money.minor_units * string_to_minor_units(value, value_precision),
+      precision: money.precision + value_precision,
       currency: money.currency
     }
+  end
+
+  def as_string(%Money{} = money) do
+    Integer.to_string(div(money.minor_units, get_power_of_ten(money.precision)))
+      <> "." <>
+      Integer.to_string(rem(money.minor_units, get_power_of_ten(money.precision)))
   end
 
   defp get_power_of_ten(n) when n == 0 do
