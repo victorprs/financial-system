@@ -1,97 +1,26 @@
-# Tech Challenge [![Build Status](https://travis-ci.org/victorprs/financial-system.svg?branch=master)](https://travis-ci.org/victorprs/financial-system) [![Coverage Status](https://coveralls.io/repos/github/victorprs/financial-system/badge.svg?branch=master)](https://coveralls.io/github/victorprs/financial-system?branch=master)
+# Financial System [![Build Status](https://travis-ci.org/victorprs/financial-system.svg?branch=master)](https://travis-ci.org/victorprs/financial-system) [![Coverage Status](https://coveralls.io/repos/github/victorprs/financial-system/badge.svg?branch=master)](https://coveralls.io/github/victorprs/financial-system?branch=master)
+ 
+A financial system library that represents money values with arbitrary-precision arithmetic, instead of floating-point math. It takes advantage of Elixir's bignum arithmetic with integers and stores all values in its minor units. Thus, the Money data structure uses Elixir's integer basic type with ability to increase precision when needed. Further reading about why floating-point math is somewhat inaccurate in the further reading section.
 
-Bem vindo(a)! Esse é o Tech Challenge Elixir!
+# Basic commands
 
-Aqui você terá todas as informações para o sucesso do seu desafio. Ele consiste em aplicar a linguagem funcional Elixir. Não se preocupe! Não cobramos experiência prévia com essa linguagem. Junto com o desafio disponibilizamos um material para estudo.
+`mix deps.get` Gets all dependencies
+`iex -S mix` Run in interactive mode
+`mix test` Test the application
+`MIX_ENV=test mix coveralls` Run coveralls for code coverage
+`MIX_ENV=test mix coveralls.details` Display code coverage per line
+`mix credo` Display credo's suggestions for code linting
+`mix credo --strict` Enforce credo to suggest further style-guide
 
-Precisamos de pessoas com energia, integridade e inteligência, que aprendam rápido e que gostem de conhecer e aplicar novas tecnologias.
+# Documentation
 
-O tempo sugerido para conclusão do desafio é de um mês, mas não é uma regra! Não temos prazo para entrega, queremos que você se dedique e demonstre a qualidade de seu código. Estamos mais interessados em observar a qualidade da solução do que o tempo que você vai demorar.
+WIP
 
-Quando sua solução estiver pronta, envie um e-mail para tech.challenge@stone.com.br com o link do seu repositório no Github. Você receberá um e-mail com a confirmação de recebimento.
+# Further reading
 
-Em seguida, enviaremos o feedback e as instruções dos próximos passos!
+[Floating Point Math](https://0.30000000000000004.com/)
+[Floating point - Wikipedia](http://en.wikipedia.org/wiki/Floating_point)
+[What Every Computer Scientist Should Know About Floating-point Arithmetic](https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html)
+[BigNum arithmetic](https://en.wikipedia.org/wiki/Arbitrary-precision_arithmetic)
 
-Caso tenha alguma dúvida, nós estamos disponíveis no twitter @StonePagamentos através da #StoneTechChallenge
 
-Bom desafio!
-
----
-
-# O Desafio
-
-O Sistema Financeiro precisa representar valores monetários. A ideia básica é ter uma estrutura de dados que permita realizar operações financeiras com dinheiro dentro de uma mesma moeda. _Isso é pelo motivo de pontos flutuantes terem problemas de aritmética_, logo encodificamos valores decimais/fracionais/reais como uma estrutura de dados com campos em inteiros, além de mapeamos operações aritméticas sobre tal estrutura. No fim, a implementação acaba sendo uma Estrutura de Dados Abstrata.
-
-Essas operações financeiras precisam ser seguras e devem interromper a execução do programa em caso de erros críticos.
-
-Sobre as operações financeiras que serão realizadas no sistema, é correto afirmar que os valores monetários devem suportar as seguintes operaçoes:
-
-* O sistema realizará split de transações financeiras, então deve ser possível realizar a operação de rateio de valores monetários entre diferentes indivíduos.
-
-* O sistema permite realizar câmbio então os valores monetários possuem uma operação para conversão de moeda.
-
-* O sistema precisa estar em _compliance_ com as organizações internacionais, então é desejável estar em conformidade com a [ISO 4217](https://pt.wikipedia.org/wiki/ISO_4217).
-
-## Requisitos Técnicos
-
-* O código do desafio está na linguagem [Elixir](http://elixir-lang.github.io/)
-
-## Comandos básicos do projeto
-
-`iex -S mix` Para rodar em modo interativo
-
-`mix test` Para testar a aplicação
-
-## Diretrizes da aplicação
-
-- O candidato está livre para adicionar sua própria lógica desde que mantenha a estrutura base que foi proposta.
-
-#### Testes pré-programados
-
-- A lógica da aplicação deve contemplar os testes configurados na pasta `/test`
-
-- Toda lógica que for adicionada no projeto deve ser testada também. 
-
-## Critérios de Avaliação
-
-O desafio será avaliado através de cinco critérios.
-
-### Entrega
-
-* O código possui algum controle de dependências?
-* O resultado final está completo para ser executado?
-* O resultado final atende ao que se propõe fazer?
-* O resultado final atende totalmente aos requisitos propostos?
-
-### Boas Práticas
-
-* O código está de acordo com o guia de estilo do Elixir?
-* O código está bem estruturado?
-* O código está fluente na linguagem?
-* O código faz o uso correto de _Design Patterns_?
-
-### Documentação
-
-* O código foi entregue com um arquivo de README claro de como se guiar?
-* O código possui comentários pertinentes?
-* O código está em algum controle de versão?
-* Os commits são pequenos e consistentes?
-* As mensagens de commit são claras?
-
-### Código Limpo
-
-* O código possibilita expansão para novas funcionalidades?
-* O código é _Don't Repeat Yourself_?
-* O código é fácil de compreender?
-
-### Controle de Qualidade
-
-* O código possui configuração de lint?
-* O código possui testes unitários?
-* O código possui teste de cobertura?
-* O código está em Integração Contínua?
-
-## Material de Estudo
-* [Elixir School - Lições sobre a linguagem de programação Elixir](https://elixirschool.com/pt/)
-* [O Guia de Estilo Elixir](https://github.com/gusaiani/elixir_style_guide/blob/master/README_ptBR.md)
-* [Boas Práticas na Stone](https://github.com/stone-payments/stoneco-best-practices/blob/master/README_pt.md)
