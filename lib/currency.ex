@@ -28,10 +28,13 @@ defmodule FinancialSystem.Currency do
   """
   def new(alphabetic_code, numeric_code, decimal_places) do
     case valid?(alphabetic_code, numeric_code, decimal_places) do
-      :ok -> {:ok, %Currency{
-        alphabetic_code: alphabetic_code,
-        numeric_code: numeric_code,
-        decimal_places: decimal_places}}
+      :ok ->
+        {:ok,
+         %Currency{
+           alphabetic_code: alphabetic_code,
+           numeric_code: numeric_code,
+           decimal_places: decimal_places
+         }}
     end
   end
 
@@ -50,14 +53,14 @@ defmodule FinancialSystem.Currency do
       currency.alphabetic_code,
       currency.numeric_code,
       currency.decimal_places
-      )
+    )
   end
 
   @doc """
     Checks if the alphabetic code, numeric code and decimal places are valid.
 
     Returns `:ok` if successfull. Raises a `RuntimeError` when the currency is not valid.
-  
+
   ## Examples
 
       iex> FinancialSystem.Currency.valid?("BRL", 100, 2)
@@ -77,6 +80,7 @@ defmodule FinancialSystem.Currency do
     if !is_integer(decimal_places) or decimal_places < 0 do
       raise "Invalid decimal places"
     end
+
     :ok
   end
 
@@ -109,8 +113,7 @@ defmodule FinancialSystem.Currency do
       {:ok, 100}
   """
   def valid_numeric_code?(numeric_code) do
-    case is_integer(numeric_code) and numeric_code >= 0 and
-           numeric_code < 1000 do
+    case is_integer(numeric_code) and numeric_code >= 0 and numeric_code < 1000 do
       true -> {:ok, numeric_code}
       false -> {:error, "Invalid numeric code"}
     end

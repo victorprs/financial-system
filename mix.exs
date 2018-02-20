@@ -6,10 +6,10 @@ defmodule FinancialSystem.Mixfile do
       app: :financial_system,
       version: "0.1.0",
       elixir: "~> 1.5",
-      start_permanent: Mix.env == :prod,
+      start_permanent: Mix.env() == :prod,
       deps: deps(),
       test_coverage: [tool: ExCoveralls],
-      preferred_cli_env: [coveralls: :test], 
+      preferred_cli_env: [coveralls: :test],
 
       # Docs
       name: "Financial System",
