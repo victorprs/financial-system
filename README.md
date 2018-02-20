@@ -2,7 +2,7 @@
  
 A financial system library that represents money values with arbitrary-precision arithmetic, instead of floating-point math. It takes advantage of Elixir's bignum arithmetic with integers and stores all values in its minor units. Thus, the Money data structure uses Elixir's integer basic type with ability to increase precision when needed. Further reading about why floating-point math is somewhat inaccurate in the further reading section.
 
-# Basic commands
+## Basic commands
 
 `mix deps.get` Gets all dependencies
 
@@ -18,12 +18,14 @@ A financial system library that represents money values with arbitrary-precision
 
 `mix credo --strict` Enforce credo to suggest further style-guide
 
+`mix docs` Generate documentation with ExDoc
 
-# Documentation
 
-WIP
+## Documentation
 
-# Further reading
+Go to my [GitHub Pages documentation site](https://victorprs.github.io/financial-system/)
+
+## Further reading
 
 [Floating Point Math](https://0.30000000000000004.com/)
 
