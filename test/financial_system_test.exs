@@ -4,24 +4,29 @@ defmodule FinancialSystemTest do
 
   alias FinancialSystem.Currency
   alias FinancialSystem.Money
+  alias FinancialSystem.Account
 
   setup_all do
     currency_brl = %Currency{alphabetic_code: "BRL", numeric_code: 100, decimal_places: 2}
     currency_usd = %Currency{alphabetic_code: "USD", numeric_code: 101, decimal_places: 2}
+    money1050_brl = %Money{minor_units: 1050, precision: 2, currency: currency_brl}
+    money10_brl = %Money{minor_units: 1000, precision: 2, currency: currency_brl}
 
     {
       :ok,
       [
         currency_brl: currency_brl,
         currency_usd: currency_usd,
-        money10_brl: %Money{minor_units: 1000, precision: 2, currency: currency_brl},
-        money1050_brl: %Money{minor_units: 1050, precision: 2, currency: currency_brl},
+        money10_brl: money10_brl,
+        money1050_brl: money1050_brl,
         money1050_precision_brl: %Money{
           minor_units: 105_000,
           precision: 4,
           currency: currency_brl
         },
-        money10_usd: %Money{minor_units: 1050, precision: 2, currency: currency_usd}
+        money10_usd: %Money{minor_units: 1050, precision: 2, currency: currency_usd},
+        account1050_brl: %Account{number: 123, balance: money1050_brl, owner: "Arthur Dent"},
+        account10_brl: %Account{number: 456, balance: money10_brl, owner: "Ford Prefect"}
       ]
     }
   end
@@ -34,6 +39,52 @@ defmodule FinancialSystemTest do
   test "convert 10.50 brl to brl with 3.3 exchange_rate raise_exception", state do
     assert_raise RuntimeError, "Error: same currency conversion", fn ->
       FinancialSystem.convert(state[:money1050_brl], state[:currency_brl], "3.3")
+    end
+  end
+
+  test "withdraw 13.37 from an account with 10.50 balance", state do
+    assert {:error, "Account does not have enough funds to withdraw"} ==
+             FinancialSystem.withdraw(state[:account1050_brl], "13.37")
+  end
+
+  test "withdraw 10.00 from an account with 10.50 balance", state do
+    assert {:ok,
+            %Account{
+              state[:account1050_brl]
+              | balance: %Money{state[:money1050_brl] | minor_units: 50}
+            }} == FinancialSystem.withdraw(state[:account1050_brl], "10.00")
+  end
+
+  test "deposit 10.00 to an account with 10.50 balance", state do
+    assert {:ok,
+            %Account{
+              state[:account1050_brl]
+              | balance: %Money{state[:money1050_brl] | minor_units: 2050}
+            }} == FinancialSystem.deposit(state[:account1050_brl], "10.00")
+  end
+
+  test "User should be able to transfer money to another account", state do
+    assert {
+             :ok,
+             %Account{
+               state[:account1050_brl]
+               | balance: %Money{state[:money1050_brl] | minor_units: 550}
+             },
+             %Account{
+               state[:account10_brl]
+               | balance: %Money{state[:money10_brl] | minor_units: 1500}
+             }
+           } == FinancialSystem.transfer(state[:account1050_brl], state[:account10_brl], "5.00")
+  end
+
+  test "User cannot transfer if not enough money available on the account", state do
+    assert {:error, "Account does not have enough funds to transfer"} ==
+             FinancialSystem.transfer(state[:account1050_brl], state[:account10_brl], "50.00")
+  end
+
+  test "A transfer should be cancelled if an error occurs", state do
+    assert_raise RuntimeError, fn ->
+      FinancialSystem.transfer(state[:account1050_brl], state[:account1050_brl], "10.00")
     end
   end
 end

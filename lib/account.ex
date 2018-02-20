@@ -20,7 +20,7 @@ defmodule FinancialSystem.Account do
     name
 
   ## Examples
-  
+
       iex> {:ok, currency} = FinancialSystem.Currency.new("BRL", 100, 2)
       iex> {:ok, money} = FinancialSystem.Money.new("42.42", currency)
       iex> FinancialSystem.Account.new(123, money, "Arthur Dent")
@@ -59,9 +59,10 @@ defmodule FinancialSystem.Account do
   """
   def has_enough_funds?(%Account{} = account, amount) when is_binary(amount) do
     case Money.valid_amount?(amount) do
-      true -> 
+      true ->
         new_money = Money.subtract(account.balance, amount)
         new_money.minor_units >= 0
+
       false ->
         raise "Invalid amount format"
     end

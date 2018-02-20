@@ -8,7 +8,7 @@
     <title>FinancialSystem – Financial System v0.1.0</title>
     <link rel="stylesheet" href="dist/app-480ffdc169.css" />
     
-    <script src="dist/sidebar_items-8f37c3e993.js"></script>
+    <script src="dist/sidebar_items-99a9dbc6de.js"></script>
     
     
     
@@ -117,6 +117,36 @@ its decimal places. </p>
 </div>
   
 </div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#deposit/2">deposit(account, amount)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Deposits the given amount into the given account</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#transfer/3">transfer(from_account, to_account, amount)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Transfer the given amount from the <code class="inline">from_account</code> to the <code class="inline">to_account</code>
+  if the first one has enough funds, i.e., a balance greater than the
+  <code class="inline">amount</code></p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#withdraw/2">withdraw(account, amount)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Withdraws the given amount from the given account if the <code class="inline">account</code>
+  has enough funds, i.e., a balance greater than the <code class="inline">amount</code></p>
+</div>
+  
+</div>
 
   </div>
 
@@ -147,7 +177,7 @@ its decimal places. </p>
     </a>
     <span class="signature">convert(money, currency, exchange_rate)</span>
     
-      <a href="https://github.com/victorprs/financial-system/blob/master/lib/financial_system.ex#L36" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/victorprs/financial-system/blob/master/lib/financial_system.ex#L37" class="view-source" rel="help" title="View Source">
        <span class="icon-code" aria-hidden="true"></span>
        <span class="sr-only">View Source</span>
      </a>
@@ -176,6 +206,165 @@ iex&gt; FinancialSystem.convert(money, new_currency, &quot;3.34&quot;)
   minor_units: 350700,
   precision: 4
 }</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="deposit/2">
+  
+  
+  <div class="detail-header">
+    <a href="#deposit/2" class="detail-link" title="Link to this function">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <span class="signature">deposit(account, amount)</span>
+    
+      <a href="https://github.com/victorprs/financial-system/blob/master/lib/financial_system.ex#L107" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
+    
+    
+    
+  </div>
+  <section class="docstring">
+    <p>  Deposits the given amount into the given account.</p>
+<p>  Returns a new account with the new balance.</p>
+<h2 id="deposit/2-examples" class="section-heading">
+  <a href="#deposit/2-examples" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Examples
+</h2>
+
+<pre><code class="iex elixir">iex&gt; {:ok, currency} = FinancialSystem.Currency.new(&quot;BRL&quot;, 100, 2)
+iex&gt; {:ok, money} = FinancialSystem.Money.new(&quot;42.42&quot;, currency)
+iex&gt; {:ok, acc} = FinancialSystem.Account.new(123, money, &quot;Arthur Dent&quot;)
+iex&gt; FinancialSystem.deposit(acc, &quot;20.00&quot;)
+{:ok,
+%FinancialSystem.Account{
+  balance: %FinancialSystem.Money{
+    currency: %FinancialSystem.Currency{
+      alphabetic_code: &quot;BRL&quot;,
+      decimal_places: 2,
+      numeric_code: 100
+    },
+    minor_units: 6242,
+    precision: 2
+  },
+  number: 123,
+  owner: &quot;Arthur Dent&quot;
+}}</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="transfer/3">
+  
+  
+  <div class="detail-header">
+    <a href="#transfer/3" class="detail-link" title="Link to this function">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <span class="signature">transfer(from_account, to_account, amount)</span>
+    
+      <a href="https://github.com/victorprs/financial-system/blob/master/lib/financial_system.ex#L154" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
+    
+    
+    
+  </div>
+  <section class="docstring">
+    <p>  Transfer the given amount from the <code class="inline">from_account</code> to the <code class="inline">to_account</code>
+  if the first one has enough funds, i.e., a balance greater than the
+  <code class="inline">amount</code>.</p>
+<p>  Returns a new account with the new balance.</p>
+<h2 id="transfer/3-examples" class="section-heading">
+  <a href="#transfer/3-examples" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Examples
+</h2>
+
+<pre><code class="iex elixir">iex&gt; {:ok, currency} = FinancialSystem.Currency.new(&quot;BRL&quot;, 100, 2)
+iex&gt; {:ok, money} = FinancialSystem.Money.new(&quot;42.42&quot;, currency)
+iex&gt; {:ok, money2} = FinancialSystem.Money.new(&quot;0.42&quot;, currency)
+iex&gt; {:ok, from_acc} = FinancialSystem.Account.new(123, money, &quot;Arthur Dent&quot;)
+iex&gt; {:ok, to_acc} = FinancialSystem.Account.new(234, money2, &quot;Ford Prefect&quot;)
+iex&gt; FinancialSystem.transfer(from_acc, to_acc, &quot;20.00&quot;)
+{:ok,
+%FinancialSystem.Account{
+  balance: %FinancialSystem.Money{
+    currency: %FinancialSystem.Currency{
+      alphabetic_code: &quot;BRL&quot;,
+      decimal_places: 2,
+      numeric_code: 100
+    },
+    minor_units: 2242,
+    precision: 2
+  },
+  number: 123,
+  owner: &quot;Arthur Dent&quot;
+},
+%FinancialSystem.Account{
+  balance: %FinancialSystem.Money{
+    currency: %FinancialSystem.Currency{
+      alphabetic_code: &quot;BRL&quot;,
+      decimal_places: 2,
+      numeric_code: 100
+    },
+    minor_units: 2042,
+    precision: 2
+  },
+  number: 234,
+  owner: &quot;Ford Prefect&quot;
+}}</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="withdraw/2">
+  
+  
+  <div class="detail-header">
+    <a href="#withdraw/2" class="detail-link" title="Link to this function">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <span class="signature">withdraw(account, amount)</span>
+    
+      <a href="https://github.com/victorprs/financial-system/blob/master/lib/financial_system.ex#L72" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
+    
+    
+    
+  </div>
+  <section class="docstring">
+    <p>  Withdraws the given amount from the given account if the <code class="inline">account</code>
+  has enough funds, i.e., a balance greater than the <code class="inline">amount</code>.</p>
+<p>  Returns a new account with the new balance.</p>
+<h2 id="withdraw/2-examples" class="section-heading">
+  <a href="#withdraw/2-examples" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Examples
+</h2>
+
+<pre><code class="iex elixir">iex&gt; {:ok, currency} = FinancialSystem.Currency.new(&quot;BRL&quot;, 100, 2)
+iex&gt; {:ok, money} = FinancialSystem.Money.new(&quot;42.42&quot;, currency)
+iex&gt; {:ok, acc} = FinancialSystem.Account.new(123, money, &quot;Arthur Dent&quot;)
+iex&gt; FinancialSystem.withdraw(acc, &quot;20.00&quot;)
+{:ok,
+%FinancialSystem.Account{
+  balance: %FinancialSystem.Money{
+    currency: %FinancialSystem.Currency{
+      alphabetic_code: &quot;BRL&quot;,
+      decimal_places: 2,
+      numeric_code: 100
+    },
+    minor_units: 2242,
+    precision: 2
+  },
+  number: 123,
+  owner: &quot;Arthur Dent&quot;
+}}</code></pre>
 
   </section>
 </div>

@@ -21,14 +21,13 @@ defmodule AccountTest do
     }
   end
 
-
   test "creates a new account returns ok", state do
     {ok, _} = Account.new(123, state[:money4242_brl], "Arthur Dent")
     assert ok == :ok
   end
 
   test "create account with invalid currency raises error", state do
-    assert_raise RuntimeError, fn -> 
+    assert_raise RuntimeError, fn ->
       Account.new(123, state[:invalid_money], "Arthur Dent")
     end
   end
@@ -50,9 +49,9 @@ defmodule AccountTest do
 
   test "raises error if invalid amount given to check if there's funds", state do
     acc = %Account{number: 123, balance: state[:money4242_brl], owner: "Arthur Dent"}
-    assert_raise RuntimeError, "Invalid amount format", fn -> 
+
+    assert_raise RuntimeError, "Invalid amount format", fn ->
       Account.has_enough_funds?(acc, "42 42")
     end
   end
-
 end
