@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.18.3">
-    <title>FinancialSystem – Financial System v0.1.0</title>
+    <title>FinancialSystem.Account – Financial System v0.1.0</title>
     <link rel="stylesheet" href="dist/app-480ffdc169.css" />
     
     <script src="dist/sidebar_items-8f37c3e993.js"></script>
@@ -70,9 +70,9 @@
 
       <h1>
         <small class="visible-xs">Financial System v0.1.0</small>
-        FinancialSystem
+        FinancialSystem.Account
         
-          <a href="https://github.com/victorprs/financial-system/blob/master/lib/financial_system.ex#L1" title="View Source" class="view-source" rel="help">
+          <a href="https://github.com/victorprs/financial-system/blob/master/lib/account.ex#L1" title="View Source" class="view-source" rel="help">
             <span class="icon-code" aria-hidden="true"></span>
             <span class="sr-only">View Source</span>
           </a>
@@ -81,12 +81,11 @@
 
       
         <section id="moduledoc">
-          <p>Financial operations with arbitrary-precision.</p>
-<p><a href="FinancialSystem.html#content"><code class="inline">FinancialSystem</code></a> is able to convert money from one currency to another with
-one requirement: that the currency is in compliance with 
-<a href="https://en.wikipedia.org/wiki/ISO_4217">ISO 4217</a>, that includes the
-currency’s alphabetic and numeric codes and the exponent that represents
-its decimal places. </p>
+          <p>  Data structure to store account properties. </p>
+<p>  Each account has a balance that represents the funds that it has in a
+  <a href="FinancialSystem.Money.html"><code class="inline">FinancialSystem.Money</code></a> struct and its respective <a href="FinancialSystem.Currency.html"><code class="inline">FinancialSystem.Currency</code></a>.
+  Each account also has an owner with its name represented by the <code class="inline">owner</code>
+  string. And of course, an account number to uniquely identify an account.</p>
 
         </section>
       
@@ -109,11 +108,21 @@ its decimal places. </p>
     </h2>
     <div class="summary-row">
   <div class="summary-signature">
-    <a href="#convert/3">convert(money, currency, exchange_rate)</a>
+    <a href="#has_enough_funds?/2">has_enough_funds?(account, amount)</a>
   </div>
   
-    <div class="summary-synopsis"><p>Converts <code class="inline">money</code> from its original currency to the new currency given via
-  the parameter <code class="inline">currency</code>, given the <code class="inline">exchange_rate</code></p>
+    <div class="summary-synopsis"><p>Check if the given account has enough funds to withdraw the given amount</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#new/3">new(number, balance, owner)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Creates a new <a href="FinancialSystem.Account.html#content"><code class="inline">FinancialSystem.Account</code></a> with the given account number, 
+  the respective balance funds that the account should have and the owner’s
+  name</p>
 </div>
   
 </div>
@@ -137,17 +146,17 @@ its decimal places. </p>
             </a>
             Functions
           </h1>
-          <div class="detail" id="convert/3">
+          <div class="detail" id="has_enough_funds?/2">
   
   
   <div class="detail-header">
-    <a href="#convert/3" class="detail-link" title="Link to this function">
+    <a href="#has_enough_funds?/2" class="detail-link" title="Link to this function">
       <span class="icon-link" aria-hidden="true"></span>
       <span class="sr-only">Link to this function</span>
     </a>
-    <span class="signature">convert(money, currency, exchange_rate)</span>
+    <span class="signature">has_enough_funds?(account, amount)</span>
     
-      <a href="https://github.com/victorprs/financial-system/blob/master/lib/financial_system.ex#L36" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/victorprs/financial-system/blob/master/lib/account.ex#L60" class="view-source" rel="help" title="View Source">
        <span class="icon-code" aria-hidden="true"></span>
        <span class="sr-only">View Source</span>
      </a>
@@ -156,26 +165,63 @@ its decimal places. </p>
     
   </div>
   <section class="docstring">
-    <p>  Converts <code class="inline">money</code> from its original currency to the new currency given via
-  the parameter <code class="inline">currency</code>, given the <code class="inline">exchange_rate</code></p>
-<h2 id="convert/3-examples" class="section-heading">
-  <a href="#convert/3-examples" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+    <p>  Check if the given account has enough funds to withdraw the given amount.</p>
+<h2 id="has_enough_funds?/2-example" class="section-heading">
+  <a href="#has_enough_funds?/2-example" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Example
+</h2>
+
+<pre><code class="iex elixir">iex&gt; {:ok, currency} = FinancialSystem.Currency.new(&quot;BRL&quot;, 100, 2)
+iex&gt; {:ok, money} = FinancialSystem.Money.new(&quot;42.42&quot;, currency)
+iex&gt; {:ok, acc} = FinancialSystem.Account.new(123, money, &quot;Arthur Dent&quot;)
+iex&gt; FinancialSystem.Account.has_enough_funds?(acc, &quot;42.42&quot;)
+true</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="new/3">
+  
+  
+  <div class="detail-header">
+    <a href="#new/3" class="detail-link" title="Link to this function">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <span class="signature">new(number, balance, owner)</span>
+    
+      <a href="https://github.com/victorprs/financial-system/blob/master/lib/account.ex#L42" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
+    
+    
+    
+  </div>
+  <section class="docstring">
+    <p>  Creates a new <a href="FinancialSystem.Account.html#content"><code class="inline">FinancialSystem.Account</code></a> with the given account number, 
+  the respective balance funds that the account should have and the owner’s
+  name</p>
+<h2 id="new/3-examples" class="section-heading">
+  <a href="#new/3-examples" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
   Examples
 </h2>
 
-<pre><code class="iex elixir">iex&gt; {:ok, original_currency} = FinancialSystem.Currency.new(&quot;BRL&quot;, 100, 2)
-iex&gt; {:ok, new_currency} = FinancialSystem.Currency.new(&quot;USD&quot;, 101, 2)
-iex&gt; {:ok, money} = FinancialSystem.Money.new(&quot;10.50&quot;, original_currency)
-iex&gt; FinancialSystem.convert(money, new_currency, &quot;3.34&quot;)
-%FinancialSystem.Money{
-  currency: %FinancialSystem.Currency{
-    alphabetic_code: &quot;USD&quot;,
-    decimal_places: 2,
-    numeric_code: 101
-  },
-  minor_units: 350700,
-  precision: 4
-}</code></pre>
+<pre><code class="iex elixir">iex&gt; {:ok, currency} = FinancialSystem.Currency.new(&quot;BRL&quot;, 100, 2)
+iex&gt; {:ok, money} = FinancialSystem.Money.new(&quot;42.42&quot;, currency)
+iex&gt; FinancialSystem.Account.new(123, money, &quot;Arthur Dent&quot;)
+{:ok, %FinancialSystem.Account{
+  balance: %FinancialSystem.Money{
+    currency: %FinancialSystem.Currency{
+      alphabetic_code: &quot;BRL&quot;,
+      decimal_places: 2,
+      numeric_code: 100
+    },
+    minor_units: 4242,
+    precision: 2
+    },
+  number: 123,
+  owner: &quot;Arthur Dent&quot;
+}}</code></pre>
 
   </section>
 </div>

@@ -4,11 +4,12 @@ fonts/icomoon.eot
 fonts/icomoon.svg
 fonts/icomoon.ttf
 fonts/icomoon.woff
-dist/sidebar_items-9b414a9187.js
+dist/sidebar_items-8f37c3e993.js
 api-reference.html
 search.html
 404.html
 FinancialSystem.html
+FinancialSystem.Account.html
 FinancialSystem.Currency.html
 FinancialSystem.Money.html
 index.html
