@@ -11,6 +11,7 @@ defmodule FinancialSystemTest do
     currency_usd = %Currency{alphabetic_code: "USD", numeric_code: 101, decimal_places: 2}
     money1050_brl = %Money{minor_units: 1050, precision: 2, currency: currency_brl}
     money10_brl = %Money{minor_units: 1000, precision: 2, currency: currency_brl}
+    money10_usd = %Money{minor_units: 1050, precision: 2, currency: currency_usd}
 
     {
       :ok,
@@ -24,9 +25,10 @@ defmodule FinancialSystemTest do
           precision: 4,
           currency: currency_brl
         },
-        money10_usd: %Money{minor_units: 1050, precision: 2, currency: currency_usd},
+        money10_usd: money10_usd,
         account1050_brl: %Account{number: 123, balance: money1050_brl, owner: "Arthur Dent"},
-        account10_brl: %Account{number: 456, balance: money10_brl, owner: "Ford Prefect"}
+        account10_brl: %Account{number: 456, balance: money10_brl, owner: "Ford Prefect"},
+        account10_usd: %Account{number: 243, balance: money10_usd, owner: "Marvin"}
       ]
     }
   end
@@ -61,6 +63,12 @@ defmodule FinancialSystemTest do
               state[:account1050_brl]
               | balance: %Money{state[:money1050_brl] | minor_units: 2050}
             }} == FinancialSystem.deposit(state[:account1050_brl], "10.00")
+  end
+
+  test "raises an exception if transfer between account with different currencies", state do
+    assert_raise RuntimeError, fn ->
+      FinancialSystem.transfer(state[:account1050_brl], state[:account10_usd], "10.00")
+    end
   end
 
   test "User should be able to transfer money to another account", state do
