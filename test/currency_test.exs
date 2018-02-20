@@ -5,7 +5,7 @@ defmodule CurrencyTest do
   test "check valid? against valid currency" do
     assert FinancialSystem.Currency.valid?("BRL", 123, 2) == :ok
   end
-  
+
   test "check valid? against currency with invalid alpha code" do
     assert_raise RuntimeError, "Invalid alphabetic code", fn ->
       FinancialSystem.Currency.valid?("brl", 123, 2)

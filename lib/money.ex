@@ -37,13 +37,13 @@ defmodule FinancialSystem.Money do
     if not valid_amount?(amount) do
       raise "Invalid amount format"
     end
+
     {:ok,
-      %Money{
-        minor_units: string_to_minor_units(amount, precision),
-        precision: precision,
-        currency: currency
-      }
-    }
+     %Money{
+       minor_units: string_to_minor_units(amount, precision),
+       precision: precision,
+       currency: currency
+     }}
   end
 
   @doc """
@@ -79,10 +79,13 @@ defmodule FinancialSystem.Money do
   """
   def string_to_minor_units(amount, decimal_places) do
     {int_part, tail} = Integer.parse(amount)
-    fract_part = tail
-    |> String.trim(".")
-    |> String.pad_trailing(decimal_places, "0")
-    |> String.to_integer
+
+    fract_part =
+      tail
+      |> String.trim(".")
+      |> String.pad_trailing(decimal_places, "0")
+      |> String.to_integer()
+
     int_part * power_of_ten(decimal_places) + fract_part
   end
 
@@ -113,16 +116,21 @@ defmodule FinancialSystem.Money do
   end
 
   def add(%Money{} = money1, %Money{} = money2) do
-    if money1.currency != money2.currency, do: raise "Can't add different currencies"
+    if money1.currency != money2.currency, do: raise("Can't add different currencies")
 
-    total = cond do
-      money1.precision == money2.precision ->
-        money1.minor_units + money2.minor_units
-      money1.precision > money2.precision ->
-        money1.minor_units + money2.minor_units * power_of_ten(money1.precision - money2.precision)
-      money1.precision < money2.precision ->
-        money1.minor_units * power_of_ten(money2.precision - money1.precision) + money2.minor_units
-    end
+    total =
+      cond do
+        money1.precision == money2.precision ->
+          money1.minor_units + money2.minor_units
+
+        money1.precision > money2.precision ->
+          money1.minor_units +
+            money2.minor_units * power_of_ten(money1.precision - money2.precision)
+
+        money1.precision < money2.precision ->
+          money1.minor_units * power_of_ten(money2.precision - money1.precision) +
+            money2.minor_units
+      end
 
     %Money{
       minor_units: total,
@@ -131,7 +139,7 @@ defmodule FinancialSystem.Money do
     }
   end
 
-    @doc """
+  @doc """
     Subtraction operation. Subtracts a given `value` in the string format from
     the given money. 
 
@@ -158,16 +166,21 @@ defmodule FinancialSystem.Money do
   end
 
   def subtract(%Money{} = money1, %Money{} = money2) do
-    if money1.currency != money2.currency, do: raise "Can't subtract different currencies"
+    if money1.currency != money2.currency, do: raise("Can't subtract different currencies")
 
-    total = cond do
-      money1.precision == money2.precision ->
-        money1.minor_units - money2.minor_units
-      money1.precision > money2.precision ->
-        money1.minor_units - money2.minor_units * power_of_ten(money1.precision - money2.precision)
-      money1.precision < money2.precision ->
-        money1.minor_units * power_of_ten(money2.precision - money1.precision) - money2.minor_units
-    end
+    total =
+      cond do
+        money1.precision == money2.precision ->
+          money1.minor_units - money2.minor_units
+
+        money1.precision > money2.precision ->
+          money1.minor_units -
+            money2.minor_units * power_of_ten(money1.precision - money2.precision)
+
+        money1.precision < money2.precision ->
+          money1.minor_units * power_of_ten(money2.precision - money1.precision) -
+            money2.minor_units
+      end
 
     %Money{
       minor_units: total,
@@ -198,12 +211,14 @@ defmodule FinancialSystem.Money do
       }
   """
   def multiply(%Money{} = money, value) when is_binary(value) do
-    if not valid_amount?(value), do: raise "Invalid value format"
+    if not valid_amount?(value), do: raise("Invalid value format")
+
     value_precision =
       value
       |> String.split(".")
-      |> List.last
-      |> String.length
+      |> List.last()
+      |> String.length()
+
     %Money{
       minor_units: money.minor_units * string_to_minor_units(value, value_precision),
       precision: money.precision + value_precision,
@@ -211,7 +226,7 @@ defmodule FinancialSystem.Money do
     }
   end
 
-    @doc """
+  @doc """
     Formats the money in a string.
 
   ## Examples
@@ -222,12 +237,8 @@ defmodule FinancialSystem.Money do
       "13.37"
   """
   def as_string(%Money{} = money) do
-    int_part = Integer.to_string(
-      div(money.minor_units, power_of_ten(money.precision)))
-    String.replace_prefix(
-      Integer.to_string(money.minor_units),
-      int_part,
-      int_part <> ".")
+    int_part = Integer.to_string(div(money.minor_units, power_of_ten(money.precision)))
+    String.replace_prefix(Integer.to_string(money.minor_units), int_part, int_part <> ".")
   end
 
   defp power_of_ten(n) when n == 0 do
@@ -235,7 +246,6 @@ defmodule FinancialSystem.Money do
   end
 
   defp power_of_ten(n) do
-    10 * power_of_ten(n-1)
+    10 * power_of_ten(n - 1)
   end
-
 end
