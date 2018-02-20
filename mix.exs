@@ -9,7 +9,11 @@ defmodule FinancialSystem.Mixfile do
       start_permanent: Mix.env == :prod,
       deps: deps(),
       test_coverage: [tool: ExCoveralls],
-      preferred_cli_env: [coveralls: :test]
+      preferred_cli_env: [coveralls: :test], 
+
+      # Docs
+      name: "Financial System",
+      source_url: "https://github.com/victorprs/financial-system"
     ]
   end
 
@@ -24,7 +28,8 @@ defmodule FinancialSystem.Mixfile do
   defp deps do
     [
       {:excoveralls, "~> 0.8", only: :test},
-      {:credo, "~> 0.8.10"}
+      {:credo, "~> 0.8.10"},
+      {:ex_doc, "~> 0.16", only: :dev, runtime: false}
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
     ]
