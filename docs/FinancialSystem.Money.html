@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.18.3">
-    <title>FinancialSystem.Money – financial_system v0.1.0</title>
+    <title>FinancialSystem.Money – Financial System v0.1.0</title>
     <link rel="stylesheet" href="dist/app-480ffdc169.css" />
     
     <script src="dist/sidebar_items-9b414a9187.js"></script>
@@ -32,7 +32,7 @@
   <a href="api-reference.html" class="sidebar-projectLink">
     <div class="sidebar-projectDetails">
       <h1 class="sidebar-projectName">
-        financial_system
+        Financial System
       </h1>
       <h2 class="sidebar-projectVersion">
         v0.1.0
@@ -69,14 +69,21 @@
 
 
       <h1>
-        <small class="visible-xs">financial_system v0.1.0</small>
+        <small class="visible-xs">Financial System v0.1.0</small>
         FinancialSystem.Money
+        
+          <a href="https://github.com/victorprs/financial-system/blob/master/lib/money.ex#L1" title="View Source" class="view-source" rel="help">
+            <span class="icon-code" aria-hidden="true"></span>
+            <span class="sr-only">View Source</span>
+          </a>
         
       </h1>
 
       
         <section id="moduledoc">
-          <p>  Data structure to handle money operations. </p>
+          <p>  Data structure to handle money operations. It takes advantage of Elixir’s
+  bignum arithmetics with the basic type <code class="inline">integer</code> to store the minor units
+  of a money value given its currency.</p>
 
         </section>
       
@@ -102,11 +109,18 @@
     <a href="#add/2">add(money1, value)</a>
   </div>
   
+    <div class="summary-synopsis"><p>Addition operation. Adds a given <code class="inline">value</code> in the string format to the given
+  money</p>
+</div>
+  
 </div>
 <div class="summary-row">
   <div class="summary-signature">
     <a href="#as_string/1">as_string(money)</a>
   </div>
+  
+    <div class="summary-synopsis"><p>Formats the money in a string</p>
+</div>
   
 </div>
 <div class="summary-row">
@@ -114,7 +128,8 @@
     <a href="#multiply/2">multiply(money, value)</a>
   </div>
   
-    <div class="summary-synopsis"><p>Multiply value of money by another value</p>
+    <div class="summary-synopsis"><p>Multiplication operation. Multiply value of money by a given <code class="inline">value</code>
+  in the string format</p>
 </div>
   
 </div>
@@ -123,11 +138,19 @@
     <a href="#new/3">new(amount, precision \\ 2, currency)</a>
   </div>
   
+    <div class="summary-synopsis"><p>Creates a new money with the <code class="inline">amount</code> given in a string format, a default
+  precision of 2 in its minor units and a given <code class="inline">currency</code></p>
+</div>
+  
 </div>
 <div class="summary-row">
   <div class="summary-signature">
     <a href="#string_to_minor_units/2">string_to_minor_units(amount, decimal_places)</a>
   </div>
+  
+    <div class="summary-synopsis"><p>Parse a given amount in the string format to the money’s structure
+  compatible minor units. <code class="inline">decimal_places</code> is the desired precision</p>
+</div>
   
 </div>
 <div class="summary-row">
@@ -135,7 +158,8 @@
     <a href="#subtract/2">subtract(money1, value)</a>
   </div>
   
-    <div class="summary-synopsis"><p>Subtract value of second money from the first money</p>
+    <div class="summary-synopsis"><p>Subtraction operation. Subtracts a given <code class="inline">value</code> in the string format from
+  the given money</p>
 </div>
   
 </div>
@@ -143,6 +167,9 @@
   <div class="summary-signature">
     <a href="#valid_amount?/1">valid_amount?(amount)</a>
   </div>
+  
+    <div class="summary-synopsis"><p>Check validity of given amount</p>
+</div>
   
 </div>
 
@@ -175,11 +202,36 @@
     </a>
     <span class="signature">add(money1, value)</span>
     
+      <a href="https://github.com/victorprs/financial-system/blob/master/lib/money.ex#L115" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
+    
     
     
   </div>
   <section class="docstring">
-    
+    <p>  Addition operation. Adds a given <code class="inline">value</code> in the string format to the given
+  money. </p>
+<p>  Returns a new <a href="FinancialSystem.Money.html#content"><code class="inline">FinancialSystem.Money</code></a>.</p>
+<h2 id="add/2-examples" class="section-heading">
+  <a href="#add/2-examples" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Examples
+</h2>
+
+<pre><code class="iex elixir">iex&gt; {:ok, original_currency} = FinancialSystem.Currency.new(&quot;BRL&quot;, 100, 2)
+iex&gt; {:ok, money} = FinancialSystem.Money.new(&quot;13.37&quot;, original_currency)
+iex&gt; FinancialSystem.Money.add(money, &quot;6.16&quot;)
+%FinancialSystem.Money{
+  currency: %FinancialSystem.Currency{
+    alphabetic_code: &quot;BRL&quot;,
+    decimal_places: 2,
+    numeric_code: 100
+  },
+  minor_units: 1953,
+  precision: 2
+}</code></pre>
+
   </section>
 </div>
 <div class="detail" id="as_string/1">
@@ -192,11 +244,26 @@
     </a>
     <span class="signature">as_string(money)</span>
     
+      <a href="https://github.com/victorprs/financial-system/blob/master/lib/money.ex#L224" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
+    
     
     
   </div>
   <section class="docstring">
-    
+    <p>  Formats the money in a string.</p>
+<h2 id="as_string/1-examples" class="section-heading">
+  <a href="#as_string/1-examples" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Examples
+</h2>
+
+<pre><code class="iex elixir">iex&gt; {:ok, original_currency} = FinancialSystem.Currency.new(&quot;BRL&quot;, 100, 2)
+iex&gt; {:ok, money} = FinancialSystem.Money.new(&quot;13.37&quot;, original_currency)
+iex&gt; FinancialSystem.Money.as_string(money)
+&quot;13.37&quot;</code></pre>
+
   </section>
 </div>
 <div class="detail" id="multiply/2">
@@ -209,11 +276,35 @@
     </a>
     <span class="signature">multiply(money, value)</span>
     
+      <a href="https://github.com/victorprs/financial-system/blob/master/lib/money.ex#L200" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
+    
     
     
   </div>
   <section class="docstring">
-    <p>  Multiply value of money by another value</p>
+    <p>  Multiplication operation. Multiply value of money by a given <code class="inline">value</code>
+  in the string format. </p>
+<p>  Returns a new <a href="FinancialSystem.Money.html#content"><code class="inline">FinancialSystem.Money</code></a>.</p>
+<h2 id="multiply/2-examples" class="section-heading">
+  <a href="#multiply/2-examples" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Examples
+</h2>
+
+<pre><code class="iex elixir">iex&gt; {:ok, original_currency} = FinancialSystem.Currency.new(&quot;BRL&quot;, 100, 2)
+iex&gt; {:ok, money} = FinancialSystem.Money.new(&quot;13.37&quot;, original_currency)
+iex&gt; FinancialSystem.Money.multiply(money, &quot;6.16&quot;)
+%FinancialSystem.Money{
+  currency: %FinancialSystem.Currency{
+    alphabetic_code: &quot;BRL&quot;,
+    decimal_places: 2,
+    numeric_code: 100
+  },
+  minor_units: 823592,
+  precision: 4
+}</code></pre>
 
   </section>
 </div>
@@ -229,11 +320,38 @@
     </a>
     <span class="signature">new(amount, precision \\ 2, currency)</span>
     
+      <a href="https://github.com/victorprs/financial-system/blob/master/lib/money.ex#L36" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
+    
     
     
   </div>
   <section class="docstring">
-    
+    <p>  Creates a new money with the <code class="inline">amount</code> given in a string format, a default
+  precision of 2 in its minor units and a given <code class="inline">currency</code>.</p>
+<p>  If successfull, returns a tuple with <code class="inline">:ok</code> status and the created
+  <a href="FinancialSystem.Money.html#content"><code class="inline">FinancialSystem.Money</code></a>.
+  Otherwise, raises a <a href="https://hexdocs.pm/elixir/RuntimeError.html"><code class="inline">RuntimeError</code></a> when the amount is not valid</p>
+<h2 id="new/3-examples" class="section-heading">
+  <a href="#new/3-examples" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Examples
+</h2>
+
+<pre><code class="iex elixir">iex&gt; {:ok, currency} = FinancialSystem.Currency.new(&quot;BRL&quot;, 100, 2)
+iex&gt; FinancialSystem.Money.new(&quot;13.37&quot;, currency)
+{:ok,
+  %FinancialSystem.Money{
+    currency: %FinancialSystem.Currency{
+      alphabetic_code: &quot;BRL&quot;,
+      decimal_places: 2,
+      numeric_code: 100
+    },
+    minor_units: 1337,
+    precision: 2
+  }}</code></pre>
+
   </section>
 </div>
 <div class="detail" id="string_to_minor_units/2">
@@ -246,11 +364,26 @@
     </a>
     <span class="signature">string_to_minor_units(amount, decimal_places)</span>
     
+      <a href="https://github.com/victorprs/financial-system/blob/master/lib/money.ex#L80" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
+    
     
     
   </div>
   <section class="docstring">
-    
+    <p>  Parse a given amount in the string format to the money’s structure
+  compatible minor units. <code class="inline">decimal_places</code> is the desired precision</p>
+<p>  Returns the parsed minor units.</p>
+<h2 id="string_to_minor_units/2-examples" class="section-heading">
+  <a href="#string_to_minor_units/2-examples" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Examples
+</h2>
+
+<pre><code class="iex elixir">iex&gt; FinancialSystem.Money.string_to_minor_units(&quot;13.37&quot;, 2)
+1337</code></pre>
+
   </section>
 </div>
 <div class="detail" id="subtract/2">
@@ -263,11 +396,35 @@
     </a>
     <span class="signature">subtract(money1, value)</span>
     
+      <a href="https://github.com/victorprs/financial-system/blob/master/lib/money.ex#L160" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
+    
     
     
   </div>
   <section class="docstring">
-    <p>  Subtract value of second money from the first money.</p>
+    <p>  Subtraction operation. Subtracts a given <code class="inline">value</code> in the string format from
+  the given money. </p>
+<p>  Returns a new <a href="FinancialSystem.Money.html#content"><code class="inline">FinancialSystem.Money</code></a>.</p>
+<h2 id="subtract/2-examples" class="section-heading">
+  <a href="#subtract/2-examples" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Examples
+</h2>
+
+<pre><code class="iex elixir">iex&gt; {:ok, original_currency} = FinancialSystem.Currency.new(&quot;BRL&quot;, 100, 2)
+iex&gt; {:ok, money} = FinancialSystem.Money.new(&quot;13.37&quot;, original_currency)
+iex&gt; FinancialSystem.Money.subtract(money, &quot;6.16&quot;)
+%FinancialSystem.Money{
+  currency: %FinancialSystem.Currency{
+    alphabetic_code: &quot;BRL&quot;,
+    decimal_places: 2,
+    numeric_code: 100
+  },
+  minor_units: 721,
+  precision: 2
+}</code></pre>
 
   </section>
 </div>
@@ -281,11 +438,25 @@
     </a>
     <span class="signature">valid_amount?(amount)</span>
     
+      <a href="https://github.com/victorprs/financial-system/blob/master/lib/money.ex#L68" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
+    
     
     
   </div>
   <section class="docstring">
-    
+    <p>  Check validity of given amount. </p>
+<p>  Returns <code class="inline">true</code> if valid, <code class="inline">false</code> otherwise</p>
+<h2 id="valid_amount?/1-examples" class="section-heading">
+  <a href="#valid_amount?/1-examples" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Examples
+</h2>
+
+<pre><code class="iex elixir">iex&gt; FinancialSystem.Money.valid_amount?(&quot;13.37&quot;)
+true</code></pre>
+
   </section>
 </div>
 

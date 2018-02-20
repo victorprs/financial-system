@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.18.3">
-    <title>FinancialSystem.Currency – financial_system v0.1.0</title>
+    <title>FinancialSystem.Currency – Financial System v0.1.0</title>
     <link rel="stylesheet" href="dist/app-480ffdc169.css" />
     
     <script src="dist/sidebar_items-9b414a9187.js"></script>
@@ -32,7 +32,7 @@
   <a href="api-reference.html" class="sidebar-projectLink">
     <div class="sidebar-projectDetails">
       <h1 class="sidebar-projectName">
-        financial_system
+        Financial System
       </h1>
       <h2 class="sidebar-projectVersion">
         v0.1.0
@@ -69,14 +69,20 @@
 
 
       <h1>
-        <small class="visible-xs">financial_system v0.1.0</small>
+        <small class="visible-xs">Financial System v0.1.0</small>
         FinancialSystem.Currency
+        
+          <a href="https://github.com/victorprs/financial-system/blob/master/lib/currency.ex#L1" title="View Source" class="view-source" rel="help">
+            <span class="icon-code" aria-hidden="true"></span>
+            <span class="sr-only">View Source</span>
+          </a>
         
       </h1>
 
       
         <section id="moduledoc">
-          <p>  Data structure to handle currency operations. </p>
+          <p>  Data structure to handle currency operations. All inputed currencies must 
+  be in compliance with <a href="https://en.wikipedia.org/wiki/ISO_4217">ISO 4217</a>.</p>
 
         </section>
       
@@ -102,11 +108,18 @@
     <a href="#new/3">new(alphabetic_code, numeric_code, decimal_places)</a>
   </div>
   
+    <div class="summary-synopsis"><p>Creates a new currency with its respective alphabetic code, numeric code
+  and decimal places</p>
+</div>
+  
 </div>
 <div class="summary-row">
   <div class="summary-signature">
     <a href="#valid?/1">valid?(currency)</a>
   </div>
+  
+    <div class="summary-synopsis"><p>Checks if the given <code class="inline">currency</code> is valid</p>
+</div>
   
 </div>
 <div class="summary-row">
@@ -114,17 +127,26 @@
     <a href="#valid?/3">valid?(alphabetic_code, numeric_code, decimal_places)</a>
   </div>
   
+    <div class="summary-synopsis"><p>Checks if the alphabetic code, numeric code and decimal places are valid</p>
+</div>
+  
 </div>
 <div class="summary-row">
   <div class="summary-signature">
     <a href="#valid_alphabetic_code?/1">valid_alphabetic_code?(alphabetic_code)</a>
   </div>
   
+    <div class="summary-synopsis"><p>Checks if the alphabetic code is valid</p>
+</div>
+  
 </div>
 <div class="summary-row">
   <div class="summary-signature">
     <a href="#valid_numeric_code?/1">valid_numeric_code?(numeric_code)</a>
   </div>
+  
+    <div class="summary-synopsis"><p>Checks if the numeric code is valid</p>
+</div>
   
 </div>
 
@@ -157,11 +179,33 @@
     </a>
     <span class="signature">new(alphabetic_code, numeric_code, decimal_places)</span>
     
+      <a href="https://github.com/victorprs/financial-system/blob/master/lib/currency.ex#L29" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
+    
     
     
   </div>
   <section class="docstring">
-    
+    <p>  Creates a new currency with its respective alphabetic code, numeric code
+  and decimal places. </p>
+<p>  If successfull, returns a tuple with <code class="inline">:ok</code> status and the created
+  <a href="FinancialSystem.Currency.html#content"><code class="inline">FinancialSystem.Currency</code></a>.
+  Otherwise, raises a <a href="https://hexdocs.pm/elixir/RuntimeError.html"><code class="inline">RuntimeError</code></a> when the currency is not valid</p>
+<h2 id="new/3-examples" class="section-heading">
+  <a href="#new/3-examples" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Examples
+</h2>
+
+<pre><code class="iex elixir">iex&gt; FinancialSystem.Currency.new(&quot;BRL&quot;, 100, 2)
+{:ok,
+  %FinancialSystem.Currency{
+    alphabetic_code: &quot;BRL&quot;,
+    decimal_places: 2,
+    numeric_code: 100
+  }}</code></pre>
+
   </section>
 </div>
 <div class="detail" id="valid?/1">
@@ -174,11 +218,26 @@
     </a>
     <span class="signature">valid?(currency)</span>
     
+      <a href="https://github.com/victorprs/financial-system/blob/master/lib/currency.ex#L48" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
+    
     
     
   </div>
   <section class="docstring">
-    
+    <p>  Checks if the given <code class="inline">currency</code> is valid</p>
+<p>  Returns <code class="inline">:ok</code> if successfull. Raises a <a href="https://hexdocs.pm/elixir/RuntimeError.html"><code class="inline">RuntimeError</code></a> when the currency is not valid.</p>
+<h2 id="valid?/1-examples" class="section-heading">
+  <a href="#valid?/1-examples" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Examples
+</h2>
+
+<pre><code class="iex elixir">iex&gt; cur1 = %FinancialSystem.Currency{alphabetic_code: &quot;BRL&quot;, numeric_code: 100, decimal_places: 2}
+iex&gt; FinancialSystem.Currency.valid?(cur1)
+:ok</code></pre>
+
   </section>
 </div>
 <div class="detail" id="valid?/3">
@@ -191,11 +250,25 @@
     </a>
     <span class="signature">valid?(alphabetic_code, numeric_code, decimal_places)</span>
     
+      <a href="https://github.com/victorprs/financial-system/blob/master/lib/currency.ex#L66" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
+    
     
     
   </div>
   <section class="docstring">
-    
+    <p>  Checks if the alphabetic code, numeric code and decimal places are valid.</p>
+<p>  Returns <code class="inline">:ok</code> if successfull. Raises a <a href="https://hexdocs.pm/elixir/RuntimeError.html"><code class="inline">RuntimeError</code></a> when the currency is not valid.</p>
+<h2 id="valid?/3-examples" class="section-heading">
+  <a href="#valid?/3-examples" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Examples
+</h2>
+
+<pre><code class="iex elixir">iex&gt; FinancialSystem.Currency.valid?(&quot;BRL&quot;, 100, 2)
+:ok</code></pre>
+
   </section>
 </div>
 <div class="detail" id="valid_alphabetic_code?/1">
@@ -208,11 +281,26 @@
     </a>
     <span class="signature">valid_alphabetic_code?(alphabetic_code)</span>
     
+      <a href="https://github.com/victorprs/financial-system/blob/master/lib/currency.ex#L93" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
+    
     
     
   </div>
   <section class="docstring">
-    
+    <p>  Checks if the alphabetic code is valid.</p>
+<p>  Returns a tuple with status <code class="inline">:ok</code> and the given code if successfull.
+  Otherwise, returns a tuple with status <code class="inline">:error</code> and the error message.</p>
+<h2 id="valid_alphabetic_code?/1-examples" class="section-heading">
+  <a href="#valid_alphabetic_code?/1-examples" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Examples
+</h2>
+
+<pre><code class="iex elixir">iex&gt; FinancialSystem.Currency.valid_alphabetic_code?(&quot;BRL&quot;)
+{:ok, &quot;BRL&quot;}</code></pre>
+
   </section>
 </div>
 <div class="detail" id="valid_numeric_code?/1">
@@ -225,11 +313,26 @@
     </a>
     <span class="signature">valid_numeric_code?(numeric_code)</span>
     
+      <a href="https://github.com/victorprs/financial-system/blob/master/lib/currency.ex#L111" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
+    
     
     
   </div>
   <section class="docstring">
-    
+    <p>  Checks if the numeric code is valid.</p>
+<p>  Returns a tuple with status <code class="inline">:ok</code> and the given code if successfull.
+  Otherwise, returns a tuple with status <code class="inline">:error</code> and the error message.</p>
+<h2 id="valid_numeric_code?/1-examples" class="section-heading">
+  <a href="#valid_numeric_code?/1-examples" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Examples
+</h2>
+
+<pre><code class="iex elixir">iex&gt; FinancialSystem.Currency.valid_numeric_code?(100)
+{:ok, 100}</code></pre>
+
   </section>
 </div>
 

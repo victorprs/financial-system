@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.18.3">
-    <title>FinancialSystem – financial_system v0.1.0</title>
+    <title>FinancialSystem – Financial System v0.1.0</title>
     <link rel="stylesheet" href="dist/app-480ffdc169.css" />
     
     <script src="dist/sidebar_items-9b414a9187.js"></script>
@@ -32,7 +32,7 @@
   <a href="api-reference.html" class="sidebar-projectLink">
     <div class="sidebar-projectDetails">
       <h1 class="sidebar-projectName">
-        financial_system
+        Financial System
       </h1>
       <h2 class="sidebar-projectVersion">
         v0.1.0
@@ -69,14 +69,24 @@
 
 
       <h1>
-        <small class="visible-xs">financial_system v0.1.0</small>
+        <small class="visible-xs">Financial System v0.1.0</small>
         FinancialSystem
+        
+          <a href="https://github.com/victorprs/financial-system/blob/master/lib/financial_system.ex#L1" title="View Source" class="view-source" rel="help">
+            <span class="icon-code" aria-hidden="true"></span>
+            <span class="sr-only">View Source</span>
+          </a>
         
       </h1>
 
       
         <section id="moduledoc">
-          <p>Documentation for FinancialSystem.</p>
+          <p>Financial operations with arbitrary-precision.</p>
+<p><a href="FinancialSystem.html#content"><code class="inline">FinancialSystem</code></a> is able to convert money from one currency to another with
+one requirement: that the currency is in compliance with 
+<a href="https://en.wikipedia.org/wiki/ISO_4217">ISO 4217</a>, that includes the
+currency’s alphabetic and numeric codes and the exponent that represents
+its decimal places. </p>
 
         </section>
       
@@ -101,6 +111,10 @@
   <div class="summary-signature">
     <a href="#convert/3">convert(money, currency, exchange_rate)</a>
   </div>
+  
+    <div class="summary-synopsis"><p>Converts <code class="inline">money</code> from its original currency to the new currency given via
+  the parameter <code class="inline">currency</code>, given the <code class="inline">exchange_rate</code></p>
+</div>
   
 </div>
 
@@ -133,11 +147,36 @@
     </a>
     <span class="signature">convert(money, currency, exchange_rate)</span>
     
+      <a href="https://github.com/victorprs/financial-system/blob/master/lib/financial_system.ex#L36" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
+    
     
     
   </div>
   <section class="docstring">
-    
+    <p>  Converts <code class="inline">money</code> from its original currency to the new currency given via
+  the parameter <code class="inline">currency</code>, given the <code class="inline">exchange_rate</code></p>
+<h2 id="convert/3-examples" class="section-heading">
+  <a href="#convert/3-examples" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Examples
+</h2>
+
+<pre><code class="iex elixir">iex&gt; {:ok, original_currency} = FinancialSystem.Currency.new(&quot;BRL&quot;, 100, 2)
+iex&gt; {:ok, new_currency} = FinancialSystem.Currency.new(&quot;USD&quot;, 101, 2)
+iex&gt; {:ok, money} = FinancialSystem.Money.new(&quot;10.50&quot;, original_currency)
+iex&gt; FinancialSystem.convert(money, new_currency, &quot;3.34&quot;)
+%FinancialSystem.Money{
+  currency: %FinancialSystem.Currency{
+    alphabetic_code: &quot;USD&quot;,
+    decimal_places: 2,
+    numeric_code: 101
+  },
+  minor_units: 350700,
+  precision: 4
+}</code></pre>
+
   </section>
 </div>
 

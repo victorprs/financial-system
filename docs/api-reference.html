@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.18.3">
-    <title>API Reference – financial_system v0.1.0</title>
+    <title>API Reference – Financial System v0.1.0</title>
     <link rel="stylesheet" href="dist/app-480ffdc169.css" />
     
     <script src="dist/sidebar_items-9b414a9187.js"></script>
@@ -32,7 +32,7 @@
   <a href="api-reference.html" class="sidebar-projectLink">
     <div class="sidebar-projectDetails">
       <h1 class="sidebar-projectName">
-        financial_system
+        Financial System
       </h1>
       <h2 class="sidebar-projectVersion">
         v0.1.0
@@ -69,7 +69,7 @@
 
 
 <h1>
-  <small class="visible-xs">financial_system v0.1.0</small>
+  <small class="visible-xs">Financial System v0.1.0</small>
   API Reference
 </h1>
 
@@ -84,21 +84,24 @@
       <div class="summary-row">
   <div class="summary-signature"><a href="FinancialSystem.html">FinancialSystem</a></div>
   
-    <div class="summary-synopsis"><p>Documentation for FinancialSystem</p>
+    <div class="summary-synopsis"><p>Financial operations with arbitrary-precision</p>
 </div>
   
 </div>
 <div class="summary-row">
   <div class="summary-signature"><a href="FinancialSystem.Currency.html">FinancialSystem.Currency</a></div>
   
-    <div class="summary-synopsis"><p>Data structure to handle currency operations</p>
+    <div class="summary-synopsis"><p>Data structure to handle currency operations. All inputed currencies must 
+  be in compliance with <a href="https://en.wikipedia.org/wiki/ISO_4217">ISO 4217</a></p>
 </div>
   
 </div>
 <div class="summary-row">
   <div class="summary-signature"><a href="FinancialSystem.Money.html">FinancialSystem.Money</a></div>
   
-    <div class="summary-synopsis"><p>Data structure to handle money operations</p>
+    <div class="summary-synopsis"><p>Data structure to handle money operations. It takes advantage of Elixir’s
+  bignum arithmetics with the basic type <code class="inline">integer</code> to store the minor units
+  of a money value given its currency</p>
 </div>
   
 </div>
