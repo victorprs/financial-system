@@ -113,7 +113,7 @@ defmodule FinancialSystem do
     if the first one has enough funds, i.e., a balance greater than the
     `amount`.
     
-    Returns a new account with the new balance.
+    Returns both new accounts, each with their respectives new balances.
 
   ## Examples
 
@@ -162,6 +162,104 @@ defmodule FinancialSystem do
         :ok,
         %Account{from_account | balance: Money.subtract(from_account.balance, amount)},
         %Account{to_account | balance: Money.add(to_account.balance, amount)}
+      }
+    else
+      {:error, "Account does not have enough funds to transfer"}
+    end
+  end
+
+  @doc """
+    Transfer the given amount from the `from_account` to the `to_accounts`
+    if the first one has enough funds, i.e., a balance greater than the
+    `amount`. `to_accounts` is a list of tuples with each tuple having the
+    first value as `FinancialSystem.Account` and the second value as the 
+    respective percentage of the money that will be transfered to the
+    corresponding account, from 0 to 1 in a string format.
+    
+    Returns the new from_account and a list with the new to_accounts and 
+    each with their respectives new balances.
+
+  ## Examples
+
+      iex> {:ok, currency} = FinancialSystem.Currency.new("BRL", 100, 2)
+      iex> {:ok, money} = FinancialSystem.Money.new("42.42", currency)
+      iex> {:ok, money2} = FinancialSystem.Money.new("10.42", currency)
+      iex> {:ok, money3} = FinancialSystem.Money.new("15.42", currency)
+      iex> {:ok, from_acc} = FinancialSystem.Account.new(123, money, "Arthur Dent")
+      iex> {:ok, to_acc1} = FinancialSystem.Account.new(423, money2, "Ford Prefect")
+      iex> {:ok, to_acc2} = FinancialSystem.Account.new(423, money3, "Marvin")
+      iex> FinancialSystem.transfer_split(from_acc, [{to_acc1, "0.5"}, {to_acc2, "0.5"}], "15.00")
+      {:ok,
+      %FinancialSystem.Account{
+        balance: %FinancialSystem.Money{
+          currency: %FinancialSystem.Currency{
+            alphabetic_code: "BRL",
+            decimal_places: 2,
+            numeric_code: 100
+          },
+          minor_units: 2742,
+          precision: 2
+        },
+        number: 123,
+        owner: "Arthur Dent"
+      },
+      [
+        %FinancialSystem.Account{
+          balance: %FinancialSystem.Money{
+            currency: %FinancialSystem.Currency{
+              alphabetic_code: "BRL",
+              decimal_places: 2,
+              numeric_code: 100
+            },
+            minor_units: 17920,
+            precision: 3
+          },
+          number: 423,
+          owner: "Ford Prefect"
+        },
+        %FinancialSystem.Account{
+          balance: %FinancialSystem.Money{
+            currency: %FinancialSystem.Currency{
+              alphabetic_code: "BRL",
+              decimal_places: 2,
+              numeric_code: 100
+            },
+            minor_units: 22920,
+            precision: 3
+          },
+          number: 423,
+          owner: "Marvin"
+        }
+      ]}
+
+  """
+  def transfer_split(%Account{} = from_account, accounts_with_percentages, amount)
+      when is_list(accounts_with_percentages) do
+    Enum.each(accounts_with_percentages, fn {account, _per} = _acc_with_per ->
+      if from_account.number == account.number, do: raise("Must transfer to different accounts")
+
+      if from_account.balance.currency != account.balance.currency,
+        do: raise("Must convert before transfer to different currencies")
+    end)
+
+    if Enum.reduce(accounts_with_percentages, 0.0, fn {_acc, percentage} = _acc_with_per,
+                                                      accumulator ->
+         String.to_float(percentage) + accumulator
+       end) != 1.0,
+       do: raise("Percentages must sum 1.0")
+
+    if Account.has_enough_funds?(from_account, amount) do
+      {:ok, money_amount} = Money.new(amount, from_account.balance.currency)
+
+      {
+        :ok,
+        %Account{from_account | balance: Money.subtract(from_account.balance, amount)},
+        Enum.map(accounts_with_percentages, fn {account, percentage} = _acc_with_per ->
+          %Account{
+            account
+            | balance: Money.add_money(account.balance, Money.multiply(money_amount, percentage))
+          }
+        end)
       }
     else
       {:error, "Account does not have enough funds to transfer"}
