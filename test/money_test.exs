@@ -70,28 +70,28 @@ defmodule MoneyTest do
   end
 
   test "multiply money 10.50 by 3.3 equals 34.65", state do
-    assert %Money{minor_units: 34650, precision: 3, currency: state[:currency_brl]} ==
+    assert %Money{minor_units: 3465, precision: 2, currency: state[:currency_brl]} ==
              Money.multiply(state[:money1050_brl], "3.3")
   end
 
   test "add two moneys 10 + 10.5 = 20.5 with different precision", state do
-    assert %Money{minor_units: 205_000, precision: 4, currency: state[:currency_brl]} ==
+    assert %Money{minor_units: 2050, precision: 2, currency: state[:currency_brl]} ==
              Money.add_money(state[:money10_brl], state[:money1050_precision_brl])
   end
 
   test "add two moneys 10.5 + 10 = 20.5 with different precision", state do
-    assert %Money{minor_units: 205_000, precision: 4, currency: state[:currency_brl]} ==
+    assert %Money{minor_units: 2050, precision: 2, currency: state[:currency_brl]} ==
              Money.add_money(state[:money1050_precision_brl], state[:money10_brl])
   end
 
   test "subtract two moneys 10.5 - 10 = 0.5 with different precision", state do
-    assert %Money{minor_units: 5000, precision: 4, currency: state[:currency_brl]} ==
+    assert %Money{minor_units: 50, precision: 2, currency: state[:currency_brl]} ==
              Money.subtract_money(state[:money1050_precision_brl], state[:money10_brl])
   end
 
   test "subtract two moneys 10.5 - 10 = 0.5 with different precision greater precision the latter parameter",
        state do
-    assert %Money{minor_units: 5000, precision: 4, currency: state[:currency_brl]} ==
+    assert %Money{minor_units: 50, precision: 2, currency: state[:currency_brl]} ==
              Money.subtract_money(state[:money1050_brl], state[:money10_precision_brl])
   end
 

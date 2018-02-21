@@ -37,7 +37,7 @@ defmodule FinancialSystemTest do
   end
 
   test "convert 10.50 brl to usd with 3.3 exchange_rate", state do
-    assert %Money{minor_units: 34650, precision: 3, currency: state[:currency_usd]} ==
+    assert %Money{minor_units: 3465, precision: 2, currency: state[:currency_usd]} ==
              FinancialSystem.convert(state[:money1050_brl], state[:currency_usd], "3.3")
   end
 
@@ -108,11 +108,11 @@ defmodule FinancialSystemTest do
             [
               %Account{
                 state[:account10_brl]
-                | balance: %Money{state[:money10_brl] | minor_units: 12750, precision: 3}
+                | balance: %Money{state[:money10_brl] | minor_units: 1275, precision: 2}
               },
               %Account{
                 state[:account950_brl]
-                | balance: %Money{state[:money950_brl] | minor_units: 12250, precision: 3}
+                | balance: %Money{state[:money950_brl] | minor_units: 1225, precision: 2}
               }
             ]} ==
              FinancialSystem.transfer_split(
