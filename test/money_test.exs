@@ -14,7 +14,7 @@ defmodule MoneyTest do
       [
         currency_brl: currency_brl,
         money10_brl: %Money{minor_units: 1000, precision: 2, currency: currency_brl},
-        money10_precision_brl: %Money{minor_units: 100000, precision: 4, currency: currency_brl},
+        money10_precision_brl: %Money{minor_units: 100_000, precision: 4, currency: currency_brl},
         money1050_brl: %Money{minor_units: 1050, precision: 2, currency: currency_brl},
         money1050_precision_brl: %Money{
           minor_units: 105_000,
@@ -89,12 +89,23 @@ defmodule MoneyTest do
              Money.subtract_money(state[:money1050_precision_brl], state[:money10_brl])
   end
 
-  test "subtract two moneys 10.5 - 10 = 0.5 with different precision greater precision the latter parameter", state do
+  test "subtract two moneys 10.5 - 10 = 0.5 with different precision greater precision the latter parameter",
+       state do
     assert %Money{minor_units: 5000, precision: 4, currency: state[:currency_brl]} ==
              Money.subtract_money(state[:money1050_brl], state[:money10_precision_brl])
   end
 
   test "returning 10.5 money as string", state do
     assert Money.as_string(state[:money1050_brl]) == "10.50"
+  end
+
+  test "user should not be able to create money with 0.00 value", state do
+    assert {:error, "Can't create money with 0.00 value"} ==
+             Money.new("0.00", state[:currency_brl])
+  end
+
+  test "user should not be able to create money with negative value", state do
+    assert {:error, "Can't create money with negative value"} ==
+             Money.new("-10.00", state[:currency_brl])
   end
 end

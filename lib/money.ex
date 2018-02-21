@@ -34,16 +34,23 @@ defmodule FinancialSystem.Money do
       
   """
   def new(amount, precision \\ 2, %Currency{} = currency) do
-    if not valid_amount?(amount) do
-      raise "Invalid amount format"
-    end
+    if not valid_amount?(amount), do: raise("Invalid amount format")
 
-    {:ok,
-     %Money{
-       minor_units: string_to_minor_units(amount, precision),
-       precision: precision,
-       currency: currency
-     }}
+    cond do
+      amount == "0.00" ->
+        {:error, "Can't create money with 0.00 value"}
+
+      string_to_minor_units(amount, precision) < 0 ->
+        {:error, "Can't create money with negative value"}
+
+      true ->
+        {:ok,
+         %Money{
+           minor_units: string_to_minor_units(amount, precision),
+           precision: precision,
+           currency: currency
+         }}
+    end
   end
 
   @doc """
