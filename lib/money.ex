@@ -162,11 +162,11 @@ defmodule FinancialSystem.Money do
             money2.minor_units
       end
 
-    %Money{
+    trim_precision(%Money{
       minor_units: total,
       precision: max(money1.precision, money2.precision),
       currency: money1.currency
-    }
+    })
   end
 
   @doc """
@@ -235,11 +235,11 @@ defmodule FinancialSystem.Money do
             money2.minor_units
       end
 
-    %Money{
+    trim_precision(%Money{
       minor_units: total,
       precision: max(money1.precision, money2.precision),
       currency: money1.currency
-    }
+    })
   end
 
   @doc """
@@ -272,11 +272,11 @@ defmodule FinancialSystem.Money do
       |> List.last()
       |> String.length()
 
-    %Money{
+    trim_precision(%Money{
       minor_units: money.minor_units * string_to_minor_units(value, value_precision),
       precision: money.precision + value_precision,
       currency: money.currency
-    }
+    })
   end
 
   @doc """
@@ -291,7 +291,31 @@ defmodule FinancialSystem.Money do
   """
   def as_string(%Money{} = money) do
     int_part = Integer.to_string(div(money.minor_units, power_of_ten(money.precision)))
-    String.replace_prefix(Integer.to_string(money.minor_units), int_part, int_part <> ".")
+
+    cond do
+      int_part == "0" ->
+        "0." <> Integer.to_string(money.minor_units)
+
+      true ->
+        String.replace_prefix(Integer.to_string(money.minor_units), int_part, int_part <> ".")
+    end
+  end
+
+  defp trim_precision(%Money{} = money) do
+    if money.precision > money.currency.decimal_places do
+      [int_part, fract_part] = String.split(Money.as_string(money), ".")
+
+      fract_part =
+        String.replace_trailing(fract_part, "0", "")
+        |> String.pad_trailing(money.precision - money.currency.decimal_places, "0")
+
+      {:ok, new_money} =
+        Money.new(int_part <> "." <> fract_part, String.length(fract_part), money.currency)
+
+      new_money
+    else
+      money
+    end
   end
 
   defp power_of_ten(n) when n == 0 do

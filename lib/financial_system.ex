@@ -29,8 +29,8 @@ defmodule FinancialSystem do
           decimal_places: 2,
           numeric_code: 101
         },
-        minor_units: 350700,
-        precision: 4
+        minor_units: 3507,
+        precision: 2
       }
     
   """
@@ -211,8 +211,8 @@ defmodule FinancialSystem do
               decimal_places: 2,
               numeric_code: 100
             },
-            minor_units: 17920,
-            precision: 3
+            minor_units: 1792,
+            precision: 2
           },
           number: 423,
           owner: "Ford Prefect"
@@ -224,8 +224,8 @@ defmodule FinancialSystem do
               decimal_places: 2,
               numeric_code: 100
             },
-            minor_units: 22920,
-            precision: 3
+            minor_units: 2292,
+            precision: 2
           },
           number: 423,
           owner: "Marvin"
