@@ -38,7 +38,7 @@ defmodule MoneyTest do
 
   test "add two moneys 10 + 10.5 = 20.5", state do
     assert %Money{minor_units: 2050, precision: 2, currency: state[:currency_brl]} ==
-             Money.add(state[:money10_brl], state[:money1050_brl])
+             Money.add_money(state[:money10_brl], state[:money1050_brl])
   end
 
   test "add two moneys 10 + 10.5 = 20.5 by value", state do
@@ -48,13 +48,13 @@ defmodule MoneyTest do
 
   test "add money with different currencies fails", state do
     assert_raise RuntimeError, "Can't add different currencies", fn ->
-      Money.add(state[:money10_brl], state[:money10_usd])
+      Money.add_money(state[:money10_brl], state[:money10_usd])
     end
   end
 
   test "subtract two moneys 10.5 - 10 = 0.5", state do
     assert %Money{minor_units: 50, precision: 2, currency: state[:currency_brl]} ==
-             Money.subtract(state[:money1050_brl], state[:money10_brl])
+             Money.subtract_money(state[:money1050_brl], state[:money10_brl])
   end
 
   test "subtract two moneys 10.5 - 10 = 0.5 by value", state do
@@ -64,7 +64,7 @@ defmodule MoneyTest do
 
   test "subtract money with different currencies fails", state do
     assert_raise RuntimeError, "Can't subtract different currencies", fn ->
-      Money.subtract(state[:money10_brl], state[:money10_usd])
+      Money.subtract_money(state[:money10_brl], state[:money10_usd])
     end
   end
 
@@ -75,22 +75,22 @@ defmodule MoneyTest do
 
   test "add two moneys 10 + 10.5 = 20.5 with different precision", state do
     assert %Money{minor_units: 205_000, precision: 4, currency: state[:currency_brl]} ==
-             Money.add(state[:money10_brl], state[:money1050_precision_brl])
+             Money.add_money(state[:money10_brl], state[:money1050_precision_brl])
   end
 
   test "add two moneys 10.5 + 10 = 20.5 with different precision", state do
     assert %Money{minor_units: 205_000, precision: 4, currency: state[:currency_brl]} ==
-             Money.add(state[:money1050_precision_brl], state[:money10_brl])
+             Money.add_money(state[:money1050_precision_brl], state[:money10_brl])
   end
 
   test "subtract two moneys 10.5 - 10 = 0.5 with different precision", state do
     assert %Money{minor_units: 5000, precision: 4, currency: state[:currency_brl]} ==
-             Money.subtract(state[:money1050_precision_brl], state[:money10_brl])
+             Money.subtract_money(state[:money1050_precision_brl], state[:money10_brl])
   end
 
   test "subtract two moneys 10 - 10 = -0.5 with different precision", state do
     assert %Money{minor_units: -5000, precision: 4, currency: state[:currency_brl]} ==
-             Money.subtract(state[:money10_brl], state[:money1050_precision_brl])
+             Money.subtract_money(state[:money10_brl], state[:money1050_precision_brl])
   end
 
   test "returning 10.5 money as string", state do

@@ -8,7 +8,7 @@
     <title>FinancialSystem.Money – Financial System v0.1.0</title>
     <link rel="stylesheet" href="dist/app-480ffdc169.css" />
     
-    <script src="dist/sidebar_items-99a9dbc6de.js"></script>
+    <script src="dist/sidebar_items-8471a29095.js"></script>
     
     
     
@@ -116,6 +116,15 @@
 </div>
 <div class="summary-row">
   <div class="summary-signature">
+    <a href="#add_money/2">add_money(money1, money2)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Addition operation. Adds <code class="inline">money2</code> to <code class="inline">money1</code></p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
     <a href="#as_string/1">as_string(money)</a>
   </div>
   
@@ -165,6 +174,15 @@
 </div>
 <div class="summary-row">
   <div class="summary-signature">
+    <a href="#subtract_money/2">subtract_money(money1, money2)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Subtraction operation. Subtracts the <code class="inline">money2</code> from the <code class="inline">money1</code></p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
     <a href="#valid_amount?/1">valid_amount?(amount)</a>
   </div>
   
@@ -202,7 +220,7 @@
     </a>
     <span class="signature">add(money1, value)</span>
     
-      <a href="https://github.com/victorprs/financial-system/blob/master/lib/money.ex#L118" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/victorprs/financial-system/blob/master/lib/money.ex#L114" class="view-source" rel="help" title="View Source">
        <span class="icon-code" aria-hidden="true"></span>
        <span class="sr-only">View Source</span>
      </a>
@@ -213,7 +231,8 @@
   <section class="docstring">
     <p>  Addition operation. Adds a given <code class="inline">value</code> in the string format to the given
   money. </p>
-<p>  Returns a new <a href="FinancialSystem.Money.html#content"><code class="inline">FinancialSystem.Money</code></a>.</p>
+<p>  Returns a new <a href="FinancialSystem.Money.html#content"><code class="inline">FinancialSystem.Money</code></a>. Raises an error if different 
+  currencies.</p>
 <h2 id="add/2-examples" class="section-heading">
   <a href="#add/2-examples" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
   Examples
@@ -222,6 +241,49 @@
 <pre><code class="iex elixir">iex&gt; {:ok, original_currency} = FinancialSystem.Currency.new(&quot;BRL&quot;, 100, 2)
 iex&gt; {:ok, money} = FinancialSystem.Money.new(&quot;13.37&quot;, original_currency)
 iex&gt; FinancialSystem.Money.add(money, &quot;6.16&quot;)
+%FinancialSystem.Money{
+  currency: %FinancialSystem.Currency{
+    alphabetic_code: &quot;BRL&quot;,
+    decimal_places: 2,
+    numeric_code: 100
+  },
+  minor_units: 1953,
+  precision: 2
+}</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="add_money/2">
+  
+  
+  <div class="detail-header">
+    <a href="#add_money/2" class="detail-link" title="Link to this function">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <span class="signature">add_money(money1, money2)</span>
+    
+      <a href="https://github.com/victorprs/financial-system/blob/master/lib/money.ex#L141" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
+    
+    
+    
+  </div>
+  <section class="docstring">
+    <p>  Addition operation. Adds <code class="inline">money2</code> to <code class="inline">money1</code>. </p>
+<p>  Returns a new <a href="FinancialSystem.Money.html#content"><code class="inline">FinancialSystem.Money</code></a>. Raises an error if different 
+  currencies.</p>
+<h2 id="add_money/2-examples" class="section-heading">
+  <a href="#add_money/2-examples" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Examples
+</h2>
+
+<pre><code class="iex elixir">iex&gt; {:ok, original_currency} = FinancialSystem.Currency.new(&quot;BRL&quot;, 100, 2)
+iex&gt; {:ok, money1} = FinancialSystem.Money.new(&quot;13.37&quot;, original_currency)
+iex&gt; {:ok, money2} = FinancialSystem.Money.new(&quot;6.16&quot;, original_currency)
+iex&gt; FinancialSystem.Money.add_money(money1, money2)
 %FinancialSystem.Money{
   currency: %FinancialSystem.Currency{
     alphabetic_code: &quot;BRL&quot;,
@@ -244,7 +306,7 @@ iex&gt; FinancialSystem.Money.add(money, &quot;6.16&quot;)
     </a>
     <span class="signature">as_string(money)</span>
     
-      <a href="https://github.com/victorprs/financial-system/blob/master/lib/money.ex#L239" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/victorprs/financial-system/blob/master/lib/money.ex#L285" class="view-source" rel="help" title="View Source">
        <span class="icon-code" aria-hidden="true"></span>
        <span class="sr-only">View Source</span>
      </a>
@@ -276,7 +338,7 @@ iex&gt; FinancialSystem.Money.as_string(money)
     </a>
     <span class="signature">multiply(money, value)</span>
     
-      <a href="https://github.com/victorprs/financial-system/blob/master/lib/money.ex#L213" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/victorprs/financial-system/blob/master/lib/money.ex#L259" class="view-source" rel="help" title="View Source">
        <span class="icon-code" aria-hidden="true"></span>
        <span class="sr-only">View Source</span>
      </a>
@@ -396,7 +458,7 @@ iex&gt; FinancialSystem.Money.new(&quot;13.37&quot;, currency)
     </a>
     <span class="signature">subtract(money1, value)</span>
     
-      <a href="https://github.com/victorprs/financial-system/blob/master/lib/money.ex#L168" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/victorprs/financial-system/blob/master/lib/money.ex#L187" class="view-source" rel="help" title="View Source">
        <span class="icon-code" aria-hidden="true"></span>
        <span class="sr-only">View Source</span>
      </a>
@@ -407,7 +469,8 @@ iex&gt; FinancialSystem.Money.new(&quot;13.37&quot;, currency)
   <section class="docstring">
     <p>  Subtraction operation. Subtracts a given <code class="inline">value</code> in the string format from
   the given money. </p>
-<p>  Returns a new <a href="FinancialSystem.Money.html#content"><code class="inline">FinancialSystem.Money</code></a>.</p>
+<p>  Returns a new <a href="FinancialSystem.Money.html#content"><code class="inline">FinancialSystem.Money</code></a>. Raises an error if different 
+  currencies.</p>
 <h2 id="subtract/2-examples" class="section-heading">
   <a href="#subtract/2-examples" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
   Examples
@@ -416,6 +479,49 @@ iex&gt; FinancialSystem.Money.new(&quot;13.37&quot;, currency)
 <pre><code class="iex elixir">iex&gt; {:ok, original_currency} = FinancialSystem.Currency.new(&quot;BRL&quot;, 100, 2)
 iex&gt; {:ok, money} = FinancialSystem.Money.new(&quot;13.37&quot;, original_currency)
 iex&gt; FinancialSystem.Money.subtract(money, &quot;6.16&quot;)
+%FinancialSystem.Money{
+  currency: %FinancialSystem.Currency{
+    alphabetic_code: &quot;BRL&quot;,
+    decimal_places: 2,
+    numeric_code: 100
+  },
+  minor_units: 721,
+  precision: 2
+}</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="subtract_money/2">
+  
+  
+  <div class="detail-header">
+    <a href="#subtract_money/2" class="detail-link" title="Link to this function">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <span class="signature">subtract_money(money1, money2)</span>
+    
+      <a href="https://github.com/victorprs/financial-system/blob/master/lib/money.ex#L214" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
+    
+    
+    
+  </div>
+  <section class="docstring">
+    <p>  Subtraction operation. Subtracts the <code class="inline">money2</code> from the <code class="inline">money1</code>.</p>
+<p>  Returns a new <a href="FinancialSystem.Money.html#content"><code class="inline">FinancialSystem.Money</code></a>. Raises an error if different 
+  currencies.</p>
+<h2 id="subtract_money/2-examples" class="section-heading">
+  <a href="#subtract_money/2-examples" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Examples
+</h2>
+
+<pre><code class="iex elixir">iex&gt; {:ok, original_currency} = FinancialSystem.Currency.new(&quot;BRL&quot;, 100, 2)
+iex&gt; {:ok, money1} = FinancialSystem.Money.new(&quot;13.37&quot;, original_currency)
+iex&gt; {:ok, money2} = FinancialSystem.Money.new(&quot;6.16&quot;, original_currency)
+iex&gt; FinancialSystem.Money.subtract_money(money1, money2)
 %FinancialSystem.Money{
   currency: %FinancialSystem.Currency{
     alphabetic_code: &quot;BRL&quot;,

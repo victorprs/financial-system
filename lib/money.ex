@@ -93,7 +93,8 @@ defmodule FinancialSystem.Money do
     Addition operation. Adds a given `value` in the string format to the given
     money. 
 
-    Returns a new `FinancialSystem.Money`.
+    Returns a new `FinancialSystem.Money`. Raises an error if different 
+    currencies.
 
   ## Examples
 
@@ -112,10 +113,32 @@ defmodule FinancialSystem.Money do
   """
   def add(%Money{} = money1, value) when is_binary(value) do
     {:ok, money2} = Money.new(value, money1.precision, money1.currency)
-    add(money1, money2)
+    add_money(money1, money2)
   end
 
-  def add(%Money{} = money1, %Money{} = money2) do
+  @doc """
+    Addition operation. Adds `money2` to `money1`. 
+
+    Returns a new `FinancialSystem.Money`. Raises an error if different 
+    currencies.
+
+  ## Examples
+
+      iex> {:ok, original_currency} = FinancialSystem.Currency.new("BRL", 100, 2)
+      iex> {:ok, money1} = FinancialSystem.Money.new("13.37", original_currency)
+      iex> {:ok, money2} = FinancialSystem.Money.new("6.16", original_currency)
+      iex> FinancialSystem.Money.add_money(money1, money2)
+      %FinancialSystem.Money{
+        currency: %FinancialSystem.Currency{
+          alphabetic_code: "BRL",
+          decimal_places: 2,
+          numeric_code: 100
+        },
+        minor_units: 1953,
+        precision: 2
+      }
+  """
+  def add_money(%Money{} = money1, %Money{} = money2) do
     if money1.currency != money2.currency, do: raise("Can't add different currencies")
 
     total =
@@ -143,7 +166,8 @@ defmodule FinancialSystem.Money do
     Subtraction operation. Subtracts a given `value` in the string format from
     the given money. 
 
-    Returns a new `FinancialSystem.Money`.
+    Returns a new `FinancialSystem.Money`. Raises an error if different 
+    currencies.
 
   ## Examples
 
@@ -162,10 +186,32 @@ defmodule FinancialSystem.Money do
   """
   def subtract(%Money{} = money1, value) when is_binary(value) do
     {:ok, money2} = Money.new(value, money1.precision, money1.currency)
-    subtract(money1, money2)
+    subtract_money(money1, money2)
   end
 
-  def subtract(%Money{} = money1, %Money{} = money2) do
+  @doc """
+    Subtraction operation. Subtracts the `money2` from the `money1`.
+
+    Returns a new `FinancialSystem.Money`. Raises an error if different 
+    currencies.
+
+  ## Examples
+
+      iex> {:ok, original_currency} = FinancialSystem.Currency.new("BRL", 100, 2)
+      iex> {:ok, money1} = FinancialSystem.Money.new("13.37", original_currency)
+      iex> {:ok, money2} = FinancialSystem.Money.new("6.16", original_currency)
+      iex> FinancialSystem.Money.subtract_money(money1, money2)
+      %FinancialSystem.Money{
+        currency: %FinancialSystem.Currency{
+          alphabetic_code: "BRL",
+          decimal_places: 2,
+          numeric_code: 100
+        },
+        minor_units: 721,
+        precision: 2
+      }
+  """
+  def subtract_money(%Money{} = money1, %Money{} = money2) do
     if money1.currency != money2.currency, do: raise("Can't subtract different currencies")
 
     total =
