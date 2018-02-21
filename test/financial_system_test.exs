@@ -12,6 +12,7 @@ defmodule FinancialSystemTest do
     money1050_brl = %Money{minor_units: 1050, precision: 2, currency: currency_brl}
     money10_brl = %Money{minor_units: 1000, precision: 2, currency: currency_brl}
     money10_usd = %Money{minor_units: 1050, precision: 2, currency: currency_usd}
+    money950_brl = %Money{minor_units: 950, precision: 2, currency: currency_brl}
 
     {
       :ok,
@@ -20,6 +21,7 @@ defmodule FinancialSystemTest do
         currency_usd: currency_usd,
         money10_brl: money10_brl,
         money1050_brl: money1050_brl,
+        money950_brl: money950_brl,
         money1050_precision_brl: %Money{
           minor_units: 105_000,
           precision: 4,
@@ -28,7 +30,8 @@ defmodule FinancialSystemTest do
         money10_usd: money10_usd,
         account1050_brl: %Account{number: 123, balance: money1050_brl, owner: "Arthur Dent"},
         account10_brl: %Account{number: 456, balance: money10_brl, owner: "Ford Prefect"},
-        account10_usd: %Account{number: 243, balance: money10_usd, owner: "Marvin"}
+        account10_usd: %Account{number: 243, balance: money10_usd, owner: "Marvin"},
+        account950_brl: %Account{number: 245, balance: money950_brl, owner: "Marvin"}
       ]
     }
   end
@@ -93,6 +96,49 @@ defmodule FinancialSystemTest do
   test "A transfer should be cancelled if an error occurs", state do
     assert_raise RuntimeError, fn ->
       FinancialSystem.transfer(state[:account1050_brl], state[:account1050_brl], "10.00")
+    end
+  end
+
+  test "A transfer can be splitted between 2 or more accounts", state do
+    assert {:ok,
+            %Account{
+              state[:account1050_brl]
+              | balance: %Money{state[:money1050_brl] | minor_units: 500}
+            },
+            [
+              %Account{
+                state[:account10_brl]
+                | balance: %Money{state[:money10_brl] | minor_units: 12750, precision: 3}
+              },
+              %Account{
+                state[:account950_brl]
+                | balance: %Money{state[:money950_brl] | minor_units: 12250, precision: 3}
+              }
+            ]} ==
+             FinancialSystem.transfer_split(
+               state[:account1050_brl],
+               [{state[:account10_brl], "0.5"}, {state[:account950_brl], "0.5"}],
+               "5.50"
+             )
+  end
+
+  test "transfer split raises error with different currencies", state do
+    assert_raise RuntimeError, fn ->
+      FinancialSystem.transfer_split(
+        state[:account1050_brl],
+        [{state[:account10_brl], "0.5"}, {state[:account10_usd], "0.5"}],
+        "5.50"
+      )
+    end
+  end
+
+  test "transfer split raises error with sum of percentages different than 1.0", state do
+    assert_raise RuntimeError, fn ->
+      FinancialSystem.transfer_split(
+        state[:account1050_brl],
+        [{state[:account10_brl], "0.5"}, {state[:account950_brl], "0.4"}],
+        "5.50"
+      )
     end
   end
 end
